@@ -450,6 +450,7 @@ const resetFilters = function() {
         checkbox.closest("label").classList.remove("checked")
     })
 
+    d3.selectAll(".f-button").classed("active-button", false)
 
 
 
@@ -459,6 +460,7 @@ const resetFilters = function() {
 
 let dataGlobal
 let legendGlobal
+let keepLegend = false
 let colorScaleGlobal
 
 
@@ -539,13 +541,18 @@ const drawLineChart = function(filteredDataset, reset = false) {
             // .style("opacity", 0)
             .remove()
 
-        // // also removing legend - transition hidden due to js async problem
-        d3.select("div.line-chart-legend").selectAll("div.boxLegend")
-            .style("opacity", 1)
-            // .transition()
-            // .duration(500)
-            .style("opacity", 0)
-            .remove()
+        if (!keepLegend) {
+
+            // // also removing legend - transition hidden due to js async problem
+            d3.select("div.line-chart-legend").selectAll("div.boxLegend")
+                .style("opacity", 1)
+                // .transition()
+                // .duration(500)
+                .style("opacity", 0)
+                .remove()
+
+        }
+
 
 
 
@@ -698,78 +705,78 @@ const drawLineChart = function(filteredDataset, reset = false) {
     let legendKeys
     let legendBoxes
 
-    // if (legendGlobal) {
-    //     // for next legend draw - to keep legend unchanged based on filters for lines
-    //     // legendKeys = legendGlobal
-    //     legendKeys = diagnoses.map(function(d) {
-    //         return {
-    //             diag: d.key,
-    //             check: false
-    //         }
+    console.log(keepLegend);
 
-    //     })
-    //     legendBoxes = d3.selectAll(".boxLegend")
+    if (keepLegend) {
+        // for next legend draw - to keep legend unchanged based on filters for lines
+        legendKeys = legendGlobal
+
+        legendBoxes = d3.selectAll(".boxLegend")
+
+        keepLegend = false
 
 
 
 
-    // } else {
+    } else {
 
-    legendKeys = diagnoses.map(function(d) {
-        return {
-            diag: d.key,
-            check: false
-        }
-
-    })
-
-    legendGlobal = legendKeys
-
-    legend = d3.select("div.legend-list")
-
-
-    legendBoxes = legend.selectAll(".boxLegend").data(legendKeys)
-        .enter().append("div")
-        .attr("class", "boxLegend")
-        .attr("id", (d, i) => i)
-        .attr("transform", function(d, i) {
-            return "translate(" + (w - 40) + "," + (i * 20) + ")";
-        })
-
-
-
-    legendBoxes.append("svg")
-        .attr("width", 20)
-        .attr("height", 20)
-        .style("margin-right", 5)
-        .append("circle")
-        .attr("fill", function(d, i) {
-
-            if (i < 5) {
-                return colorScale(d.diag)
-            } else {
-                return 'lightgrey'
+        legendKeys = diagnoses.map(function(d) {
+            return {
+                diag: d.key,
+                check: false
             }
+
         })
-        // .attr("width", "100%").attr("height", "100%")
-        .attr("r", "5px")
-        .attr("cx", "50%")
-        .attr("cy", "50%")
 
-    legendBoxes.append("text").text(function(d) { return d.diag; })
-        .attr("transform", "translate(15,9)"); //align texts with boxes
+        legendGlobal = legendKeys
 
-    legendBoxes.style("opacity", 0)
-        .transition()
-        .duration(1000)
-        .style("opacity", 1)
+        legend = d3.select("div.legend-list")
 
-    // }
+
+        legendBoxes = legend.selectAll(".boxLegend").data(legendKeys)
+            .enter().append("div")
+            .attr("class", "boxLegend")
+            .attr("id", (d, i) => i)
+            .attr("transform", function(d, i) {
+                return "translate(" + (w - 40) + "," + (i * 20) + ")";
+            })
+
+
+
+        legendBoxes.append("svg")
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("margin-right", 5)
+            .append("circle")
+            .attr("fill", function(d, i) {
+
+                if (i < 5) {
+                    return colorScale(d.diag)
+                } else {
+                    return 'lightgrey'
+                }
+            })
+            // .attr("width", "100%").attr("height", "100%")
+            .attr("r", "5px")
+            .attr("cx", "50%")
+            .attr("cy", "50%")
+
+        legendBoxes.append("text").text(function(d) { return d.diag; })
+            .attr("transform", "translate(15,9)"); //align texts with boxes
+
+        legendBoxes.style("opacity", 0)
+            .transition()
+            .duration(1000)
+            .style("opacity", 1)
+
+    }
 
 
 
 
     d3.selectAll("div.boxLegend").on("click", function() {
+
+        keepLegend = true
 
         filterStatus['Діагноз']['init'] = false
 
@@ -803,7 +810,9 @@ const drawLineChart = function(filteredDataset, reset = false) {
 
         filterStatus['Діагноз']['status'] = true
         filterStatus['Діагноз']['items'] = legendKeys
+        console.log(keepLegend);
         MakeTimeLine(reset = true)
+
 
     })
 
