@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mariupol open data project</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+    <script type="text/javascript" src="./d3.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar-container">
+            <div class="header-background">
+                <div class="header-block">
+                    <header>
+                        <h1>Медицина Маріуполя в цифрах</h1>
+                    </header>
+                </div>
+            </div>
+
+            <div class="navbar-block">
+                <nav id="navbar">
+                    <ul>
+                        <div class="navbox">
+                            <li><a href="./new_index.html">ПЕРВИННА МЕДИЦИНА</a></li>
+                        </div>
+                        <div class="navbox selected">
+                            <li><a href="./new_disease_stats.html">ДІАГНОСТИКА ЗАХВОРЮВАНЬ</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./new_charity.html">БЛАГОДІЙНА ДОПОМОГА</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./about_project.html">ПРО ПРОЕКТ</a></li>
+                        </div>
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="sidebar-text">
+                <text>
+                    Діджиталізація охорони здоров’я
+                    має три основні переваги. Перше
+                    — це прості й прозорі медичні
+                    послуги. Електронний запис
+                    позбавляє необхідності чекати в
+                    чергах під кабінетами та пов’язаних
+                    з цим корупційними ризиками.
+                    Друге — це якісне лікування.
+                    Електронні медичні картки дають
+                    можливість спеціалістам краще
+                    відслідковувати стан здоров’я
+                    пацієнтів та призначати дієву
+                    терапію. Третє — це обґрунтована
+                    політика. Використовуючи дані,
+                    міська влада може розробляти
+                    ефективні програми для
+                    покращення здоров’я громадян.
+                </text>
+
+            </div>
+
+        </div>
+
+        <div class="dis-content-container">
+            <div class="header-block">
+                <h5>ПОПЕРЕДЬТЕ ВИНИКНЕННЯ ХВОРОБ</h5>
+                <text>Вчасна діагностика допомагає запобігти виникненню багатьох хвороб. Тому важливо слідкувати за станом здоров’я,
+                    проходити планові обстеження та вакцинацію. Введіть дані про свою стать та вік, та отримайте інформацію про 10
+                    найбільш поширених хвороб, що в ній діагностуються. Також сервіс надасть вам поради, щодо проходження планової
+                    діагностики та вакцинації у сімейного лікаря.</text>
+            </div>
+            <div class="choose-gender-age">
+                <div class="calc-container initial">
+                    <div class="title-calc">КАЛЬКУЛЯТОР</div>
+                    <div class="title-buttons gender">Оберіть свою стать:</div>
+                    <div class="gender-buttons">
+                        <div class="gender-selector calc-selected-button">ЧОЛОВІК</div>
+                        <div class="gender-selector">ЖІНКА</div>
+                    </div>
+                    <div class="title-buttons age">Оберіть свій вік:</div>
+                    <div class="age-buttons">
+                        <div class="age-selector">0-5</div>
+                        <div class="age-selector">6-17</div>
+                        <div class="age-selector calc-selected-button">18-39</div>
+                        <div class="age-selector">40-64</div>
+                        <div class="age-selector">65+</div>
+                    </div>
+                    <div class="next-button">ДАЛІ</div>
+                </div>
+                <div class="gender-age-body">
+                    <div id="gender-age-bars"></div>
+                    <div id="gender-age-description">
+                        <p class="block-header"></p>
+                        <p class="main-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-line-chart">
+                <h5>ТОП-100 НАЙБІЛЬШ ПОШИРЕНИХ ЗАХВОРЮВАНЬ</h5>
+                <text>Щомісяця маріупольські медики діагностують від 16 до 35 тис. захворювань. На кількість звернень впливає сезонність
+                    хвороб. Наприклад, в осінньо-зимовий період найбільше пацієнтів надходить з гострою респіраторною вірусною
+                    інфекцією (у побуті — грип). На графіку можна проаналізувати динаміку діагностики 100 найбільш поширених
+                    захворювань. Використайте фільтри для того, щоб налаштувати категорію діагнозів, заклад охорони здоров’я, стать
+                    або вік пацієнтів.</text>
+            </div>
+            <div class="line-chart-container">
+                <div class="line-filters-left">
+                    <div class="gender-block">
+                        <div class="f-button drop-filter">Скинути всі фільтри</div>
+                        <div class="gender-filters">
+                            <div class="f-button male-filter">ЧОЛОВІК</div>
+                            <div class="f-button female-filter">ЖІНКА</div>
+                        </div>
+
+                    </div>
+                    <div class="age-block">
+                        <div class="age-title">Оберіть вік:</div>
+                        <div class="age-filters">
+                            <div class="f-button age-filter">0-5</div>
+                            <div class="f-button age-filter">6-17</div>
+                            <div class="f-button age-filter">18-39</div>
+                            <div class="f-button age-filter">40-64</div>
+                            <div class="f-button age-filter">65+</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle-space-left">
+                    <span>Статистика звернень пацієнтів по обраним діагнозам</span>
+                    <span>Центр первинної медико-санітарної допомоги №2</span>
+                </div>
+                <div class="line-chart-svg"></div>
+
+                <div class="line-filters-right">
+                    <div class="hospital-filters">
+                        <div class="h-button select-all">
+                            <span>ВСІ ЛІКАРНІ</span>
+                            <div class="checklist">
+                            </div>
+                        </div>
+                        <div class="h-button hosp-choice">
+                            <span>ВИБРАТИ ЛІКАРНЮ</span>
+                            <ul></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle-space-right">
+                    <div class="diag-filter">
+                        <div>Діагноз:</div>
+                        <div class="diag-input-box">
+                            <input type="search" id="dis-search" list="diagnoses" autocomplete="off" placeholder="Ввести хворобу">
+                        </div>
+                    </div>
+                </div>
+                <div class="line-chart-legend">
+                    <div class="legend-list"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="text/javascript" src="./disease_charts.js"></script>
+
+</body>
+
+</html>

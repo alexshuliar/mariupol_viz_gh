@@ -1,0 +1,99 @@
+@font-face {
+  font-family: Dia;
+  src: url(../e-Ukraine-Medium.woff);
+  font-weight: medium;
+}
+
+@font-face {
+  font-family: Dia;
+  src: url(../e-Ukraine-Bold.woff);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Dia;
+  src: url(../e-UkraineHead-Thin.woff);
+  font-weight: thin;
+}
+
+@font-face {
+  font-family: Dia;
+  src: url(../e-Ukraine-Light.woff);
+  font-weight: light;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 30% auto;
+      grid-template-columns: 30% auto;
+  font-family: Dia;
+  color: white;
+}
+
+.container .sidebar-container {
+  display: -ms-grid;
+  display: grid;
+  background-image: linear-gradient(-162.4deg, #2678bd, #c88bbc);
+}
+
+.container .sidebar-container .header-background {
+  background-image: url(../M_sign.png);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+}
+
+.container .sidebar-container .header-background .header-block {
+  padding: 44px 115px 30px 44px;
+}
+
+.container .sidebar-container .navbar-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: space-around;
+      -ms-flex-align: space-around;
+          align-items: space-around;
+  margin-top: 18px;
+  padding: 0px 18px 0px 44px;
+}
+
+.container .sidebar-container .navbar-block .navbox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 40px;
+  width: 250px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: white;
+  border-radius: 10px;
+}
+
+.container .sidebar-container .navbar-block li {
+  list-style-type: none;
+}
+
+.container .sidebar-container .navbar-block li a {
+  outline: none;
+  text-decoration: none;
+  color: white;
+}
+
+.container .sidebar-container .sidebar-text {
+  margin-top: 88px;
+  padding: 0px 44px 60px 44px;
+}

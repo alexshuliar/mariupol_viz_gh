@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mariupol open data project</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+    <script src="./d3.v3.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar-container">
+            <div class="header-background">
+                <div class="header-block">
+                    <header>
+                        <h1>Медицина Маріуполя в цифрах</h1>
+                    </header>
+                </div>
+            </div>
+
+            <div class="navbar-block">
+                <nav id="navbar">
+                    <ul>
+                        <div class="navbox">
+                            <li><a href="./new_index.html">ПЕРВИННА МЕДИЦИНА</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./new_disease_stats.html">ДІАГНОСТИКА ЗАХВОРЮВАНЬ</a></li>
+                        </div>
+                        <div class="navbox selected">
+                            <li><a href="./new_charity.html">БЛАГОДІЙНА ДОПОМОГА</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./about_project.html">ПРО ПРОЕКТ</a></li>
+                        </div>
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="sidebar-text">
+                <text>
+                    У 2019 комунальні заклади охорони
+                    здоров’я Маріуполя отримали
+                    благодійної допомоги більше, ніж на 171 млн.
+                    гривень. Пожертви надходили як
+                    у вигляді коштів, так і товарів або
+                    послуг. Відкриті дані забезпечують
+                    прозоре та підзвітне використання
+                    благодійної допомоги. А
+                    це дозволяє ефективно
+                    використовувати ресурси та
+                    сприяє формуванню довіри між
+                    доброчинцями та закладами
+                    охорони здоров’я.
+                </text>
+
+            </div>
+
+        </div>
+
+        <div class="charity-content-container">
+            <div class="header-block">
+                <h5>БЛАГОДІЙНА ДОПОМОГА ОТРИМАНА ЗАКЛАДАМИ ОХОРОНИ ЗДОРОВ’Я</h5>
+                <text>Розмір кожного прямокутника на графіку є пропорційним вартості благодійної допомоги, яку отримав заклад охорони
+                    здоров’я. Клікніть на прямокутник, щоб переглянути структуру товарів та послуг.</text>
+            </div>
+
+            <div id="treemap-container">
+                <div id="chart"></div>
+            </div>
+            <div class="charity-table-container">
+                <div id="charity-table">
+                    <div class="table-filters">
+                        <div class="filter-cell period">
+                            <text></text>
+                            <span>X</span>
+                        </div>
+                        <div class="filter-cell hospital">
+                            <text></text>
+                            <span>X</span>
+                        </div>
+                        <div class="filter-cell name">
+                            <text></text>
+                            <span>X</span>
+                        </div>
+                        <div class="filter-cell goods">
+                            <text></text>
+                            <span>X</span>
+                        </div>
+                        <div class="filter-cell sum">
+                            <text></text>
+                            <span>X</span>
+                        </div>
+                    </div>
+                    <div class="thead">
+                        <div class="table-header period">Квартал
+                            <div class="col-options">
+                                <ul></ul>
+                            </div>
+                        </div>
+
+                        <div class="table-header hospital">Медичний заклад
+                            <div class="col-options">
+                                <ul></ul>
+                            </div>
+                        </div>
+
+                        <div class="table-header name">Благодійник
+                            <div class="col-options">
+                                <ul></ul>
+                            </div>
+                        </div>
+                        <div class="table-header goods">Товар/послуга
+                            <div class="col-options">
+                                <ul></ul>
+                            </div>
+                        </div>
+                        <div class="table-header sum">Сума, тис. грн</div>
+
+                    </div>
+                    <div class="tbody"></div>
+
+                </div>
+            </div>
+
+            <script type="text/javascript" src="./charity.js"></script>
+
+
+</body>
+
+</html>

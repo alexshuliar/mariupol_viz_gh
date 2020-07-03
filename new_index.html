@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mariupol open data project</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+    <script type="text/javascript" src="./d3.js"></script>
+    <script src="./d3-simple-slider.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar-container">
+            <div class="header-background">
+                <div class="header-block">
+                    <header>
+                        <h1>Медицина Маріуполя в цифрах</h1>
+                    </header>
+                </div>
+            </div>
+
+            <div class="navbar-block">
+                <nav id="navbar">
+                    <ul>
+                        <div class="navbox selected">
+                            <li><a href="./new_index.html">ПЕРВИННА МЕДИЦИНА</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./new_disease_stats.html">ДІАГНОСТИКА ЗАХВОРЮВАНЬ</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./new_charity.html">БЛАГОДІЙНА ДОПОМОГА</a></li>
+                        </div>
+                        <div class="navbox">
+                            <li><a href="./about_project.html">ПРО ПРОЕКТ</a></li>
+                        </div>
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="sidebar-text">
+                <text>
+                    Сімейна або первинна
+                    медицина, об’єднує терапевтів,
+                    сімейних лікарів та педіатрів.
+                    Вони працюють з найбільш
+                    поширеними захворюваннями
+                    та за необхідності спрямовують
+                    пацієнтів до вузькопрофільних
+                    спеціалістів, що надають
+                    вторинну або третинну медичну
+                    допомогу. Муніципальна система
+                    первинної медицини Маріуполя
+                    — це п’ять центрів первинної
+                    медико-санітарної допомоги, в
+                    яких працює понад 265 сімейних
+                    лікарів. Щороку вони проводять
+                    понад 1 млн. прийомів пацієнтів.
+                    Відкриті дані дозволяють
+                    з’ясувати чи ефективно
+                    витрачаються бюджетні кошти
+                    на первинну медицину. На
+                    основі інформації з електронних
+                    сервісів пацієнти можуть
+                    обирати або змінювати сімейних
+                    лікарів, планувати проходження
+                    обстежень.
+                </text>
+
+            </div>
+
+        </div>
+
+        <div class="content-container">
+            <div class="hospital-stats-container">
+                <div class="hospital-text">
+                    <h5>«ГРОШІ ХОДЯТЬ ЗА ПАЦІЄНТАМИ»</h5>
+                    <text>Безкоштовної медицини не існує. Можливість отримати безкоштовну консультацію або лікування в комунальному
+                        закладі сплачується коштом платників податків. Завдання держави — ефективно розподіляти ці кошти. З 2019 року
+                        державне фінансування первинної медицини здійснюється відповідно до кількості укладених декларацій. Таким чином,
+                        гроші виділяються не на кількість ліжок або персоналу, а на пацієнтів, що отримують медичні послуги. На графіку
+                        можна проаналізувати співвідношення між щомісячним фінансуванням та показниками роботи центрів первинної
+                        медико-санітарної допомоги Маріуполя.</text>
+                </div>
+                <div class="bar-chart"></div>
+                <div class="time-scale">
+                    <!-- <div class="slider-title">
+                        <p id="value-time"></p>
+                    </div> -->
+                    <div class="slider-body">
+                        <!-- <div id="slider-time"></div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="doctor-stats-container">
+                <div class="doctor-text">
+                    <h5>ХТО З ЛІКАРІВ ПРИЙМАЄ НАЙБІЛЬШЕ ПАЦІЄНТІВ?</h5>
+                    <text>Кількість прийомів, які проводить сімейний лікар залежить від багатьох чинників. Найбільше на це впливає кількість
+                        пацієнтів, їх статевий та віковий розподіл. Дізнайтеся інформацію про роботу свого сімейного лікаря. Якою є його або її
+                        завантаженість? Які групи пацієнтів він або вона обслуговує? Ця інформація може стати корисною під час планування
+                        обстеження, обрання або зміни сімейного лікаря.</text>
+                </div>
+                <div class="beeswarm-chart">
+                    <div class="main-chart">
+                        <div class="button-container">
+                            <div class="color-buttons">
+                                <div class="bee-button selected-button" id="hospital">
+                                    <text>ЗАКЛАД</text>
+                                </div>
+                                <div class="bee-button" id="doctor-spec">
+                                    <text>СПЕЦІАЛЬНІСТЬ ЛІКАРЯ</text>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="svg-area"></div>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-title">
+                            <text>Центр первинної медико-санітарної допомоги:</text>
+                        </div>
+                        <div class="legend-markers"></div>
+                    </div>
+
+                </div>
+                <div class="search-button">
+                    <div id="search-box">
+                        <div class="label-box">
+                            <label for="doc-search">ЗНАЙТИ СВОГО ЛІКАРЯ</label>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="searh" id="doc-search" name="q" list="doctors" autocomplete="off" placeholder="Введіть прізвище лікаря">
+                        </div>
+                        <div class="button-box">
+                            <button>ДАЛІ</button>
+                        </div>
+                        <datalist id="doctors"></datalist>
+                    </div>
+                </div>
+                <div class="doctor-profile">
+                    <div class="general-info">
+                        <div class="doc-name">
+                            <p class="profile-title">Ім'я лікаря</p>
+                            <p id="doc-name"></p>
+                        </div>
+                        <div class="doc-spec">
+                            <p class="profile-title">Спеціальність</p>
+                            <p id="doc-spec"></p>
+                        </div>
+                        <div class="doc-hospital">
+                            <p class="profile-title">Медичний заклад</p>
+                            <p id="doc-hospital"></p>
+                        </div>
+                    </div>
+                    <div class="load-info">
+                        <div class="load-perc">
+                            <p class="profile-title">Кількість прийомів в тиждень</p>
+                            <p id="load-indicator">
+                        </div>
+                        <div class="heatmap">
+                            <p class="profile-title">Навантаження лікаря за останні два місяці</p>
+                            <div id="calendar-heatmap"></div>
+                        </div>
+                    </div>
+                    <div class="gender-age-info">
+                        <p class="profile-title">Статево-віковий розподіл пацієнтів</p>
+                        <div class="gender-age"></div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript" src="./main.js"></script>
+    <script type="text/javascript" src="./popup_chart.js"></script>
+
+</body>
+
+</html>
