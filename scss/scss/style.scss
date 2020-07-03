@@ -13,6 +13,8 @@ input::-webkit-calendar-picker-indicator {
     grid-template-columns: 1fr 2fr;
     font-family: Dia;
     height: 1450px;
+    width: 1284px;
+    margin: 0 auto;
     .sidebar-container {
         display: grid;
         // old sizes for 3 navboxes only
