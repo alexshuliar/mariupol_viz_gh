@@ -17,20 +17,16 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr;
     font-family: Dia;
-    height: 1450px;
-    width: 1284px;
+    max-width: 1284px;
+    width: 100%;
     margin: 0 auto;
+    z-index: 1;
     .sidebar-container {
-        display: grid;
-        // old sizes for 3 navboxes only
-        // grid-template-rows: 0.15fr 0.2fr 0.65fr;
-        grid-template-rows: 0.15fr 0.27fr 0.65fr;
-        grid-template-columns: 100%;
         background-image: linear-gradient(-162.4deg, #2678bd, #c88bbc);
         color: white;
         .header-background {
             background-image: url(../M_sign.png);
-            // object-fit: cover;
+            height: 34vh;
             background-size: 50% 100%;
             background-repeat: no-repeat;
             margin-bottom: 18px;
@@ -42,6 +38,7 @@ body {
             }
         }
         .navbar-block {
+            height: 47vh;
             padding: 0px 55px 0px 55px;
             #navbar {
                 height: 100%;
@@ -50,6 +47,7 @@ body {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
+                    text-align: center;
                 }
             }
             .navbox {
@@ -83,13 +81,9 @@ body {
         .sidebar-text {
             padding: 60px 75px 55px 55px;
             line-height: 1.5;
-            // height: 10fr;
         }
     }
     .content-container {
-        display: grid;
-        grid-template-rows: 1.7fr 3fr;
-        grid-template-columns: 100%;
         padding-left: 35px;
         padding-right: 35px;
         h5,
@@ -104,24 +98,9 @@ body {
             .hospital-text {
                 padding: 44px 44px 30px 0px
             }
-            .time-scale {
-                .slider-title,
-                .slider-body {
-                    display: flex;
-                    justify-content: center;
-                }
-                .slider-body svg {
-                    width: 550px;
-                    height: 70px;
-                    .tick line {
-                        stroke: black;
-                    }
-                    text {
-                        font-size: 10px;
-                    }
-                }
-            }
             .bar-chart {
+                height: 30vh;
+                margin-bottom: 15px;
                 .column-header,
                 .column-content {
                     font-size: 12px;
@@ -161,19 +140,42 @@ body {
                     }
                 }
             }
+            .time-scale {
+                height: 8vh;
+                margin-bottom: 50px;
+                .slider-title,
+                .slider-body {
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                }
+                .slider-body svg {
+                    width: 75%;
+                    height: 100%;
+                    .tick line {
+                        stroke: black;
+                    }
+                    text {
+                        font-size: 11px;
+                    }
+                }
+            }
         }
         .doctor-stats-container {
-            display: grid;
-            grid-template-rows: 0.09fr 40% 10.5% 33%;
+            .doctor-text {
+                margin-bottom: 20px;
+            }
             .beeswarm-chart {
                 display: grid;
                 grid-template-columns: 0.8fr 0.2fr;
+                height: 53vh;
+                margin-bottom: 20px;
                 .main-chart {
                     display: grid;
                     grid-template-rows: 0.15fr 0.85fr;
                     .button-container {
-                        display: flex;
-                        flex-direction: column;
+                        // display: flex;
+                        // flex-direction: column;
                         justify-content: center;
                         .color-buttons {
                             display: flex;
@@ -231,13 +233,17 @@ body {
                         display: flex;
                         flex-direction: column;
                         height: 75%;
-                        justify-content: space-between;
+                        .circleLegend {
+                            margin-top: 0.7em;
+                        }
                     }
                 }
             }
             .search-button {
+                height: 13vh;
                 background-image: linear-gradient(-162.4deg, #2678bd, #c88bbc);
                 border-radius: 10px;
+                margin-bottom: 20px;
                 #search-box {
                     color: white;
                     display: flex;
@@ -296,7 +302,9 @@ body {
                 display: grid;
                 grid-template-columns: 0.27fr 0.44fr 0.3fr;
                 column-gap: 15px;
-                padding-top: 15px;
+                // padding-top: 15px;
+                padding: 15px 0px 30px 0px;
+                height: 42vh;
                 p {
                     padding-left: 20px;
                     font-size: 12px;
@@ -358,10 +366,6 @@ body {
         }
     }
     .dis-content-container {
-        display: grid;
-        // grid-template-rows: 1.45fr 2.55fr 1.6fr 4fr;
-        // grid-template-rows: 0.12fr 0.354fr 0.15fr 0.4fr;
-        grid-template-rows: 0.12fr 0.23fr 0.15fr 0.4fr;
         padding-left: 35px;
         padding-right: 35px;
         h5,
@@ -378,7 +382,7 @@ body {
         .choose-gender-age {
             margin-right: 44px;
             .calc-container {
-                // margin-right: 44px;
+                margin-bottom: 30px;
                 background-image: linear-gradient(90deg, #2678bd, #c88bbc);
                 border-radius: 10px;
                 display: flex;
@@ -386,7 +390,7 @@ body {
                 align-items: center;
                 font-size: 12px;
                 color: white;
-                height: 100%;
+                height: 50vh;
                 &.tight {
                     display: grid;
                     height: 17vh;
@@ -472,9 +476,12 @@ body {
                 }
             }
             .gender-age-body {
-                display: flex;
-                padding-top: 30px;
+                // display: flex;
+                display: none;
+                // padding-top: 30px;
+                margin-bottom: 30px;
                 #gender-age-bars {
+                    min-height: 60vh;
                     padding-right: 40px;
                     flex-grow: 0.5;
                     flex-basis: 20vw;
@@ -507,13 +514,11 @@ body {
             }
         }
         .header-line-chart {
-            padding: 70px 44px 30px 0px;
+            padding: 0px 44px 30px 0px;
         }
         .line-chart-container {
             display: grid;
             grid-template-areas: "filters-left filters-right" "middle-space-left middle-space-right" "svg legend" "svg legend";
-            // grid-template-rows: 0.4fr 0.6fr repeat(2, 1fr);
-            grid-template-rows: 0.14fr 0.2fr repeat(2, 0.33fr);
             grid-template-columns: 6.5fr 3.7fr;
             position: relative;
             .line-filters-left {
@@ -522,7 +527,6 @@ body {
                 grid-area: filters-left;
                 font-size: 12px;
                 color: #2678bd;
-                // max-height: 0px;
                 align-items: flex-end;
                 .gender-block {
                     display: flex;
@@ -603,19 +607,73 @@ body {
                 grid-area: middle-space-left;
                 display: flex;
                 flex-direction: column;
-                padding-top: 50px;
+                // padding-top: 50px;
                 color: #2678bd;
-                & :nth-child(1) {
+                & :nth-child(2) {
                     font-size: 12px;
                     font-weight: bold;
                 }
-                & :nth-child(2) {
+                & :nth-child(3) {
                     margin-top: 5px;
                     font-size: 10px;
+                }
+                .slider-box {
+                    padding: 10px 0px 19px 0px;
+                    .switch {
+                        position: relative;
+                        display: inline-block;
+                        width: 30px;
+                        height: 17px;
+                    }
+                    .switch input {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                    }
+                    .slider {
+                        position: absolute;
+                        cursor: pointer;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: #B5C4E6;
+                        -webkit-transition: .4s;
+                        transition: .4s;
+                    }
+                    .slider:before {
+                        position: absolute;
+                        content: "";
+                        height: 13px;
+                        width: 13px;
+                        left: 2px;
+                        bottom: 2px;
+                        background-color: white;
+                        -webkit-transition: .4s;
+                        transition: .4s;
+                    }
+                    input:checked+.slider {
+                        background-color: #2678bd;
+                    }
+                    input:focus+.slider {
+                        box-shadow: 0 0 1px #2678bd;
+                    }
+                    input:checked+.slider:before {
+                        -webkit-transform: translateX(13px);
+                        -ms-transform: translateX(13px);
+                        transform: translateX(13px);
+                    }
+                    .slider.round {
+                        border-radius: 34px;
+                    }
+                    .slider.round:before {
+                        border-radius: 50%;
+                    }
                 }
             }
             .line-chart-svg {
                 grid-area: svg;
+                height: 50vh;
                 svg {
                     text {
                         font-size: 8px;
@@ -742,7 +800,7 @@ body {
                         padding-right: 15px;
                     }
                     .diag-input-box {
-                        margin-top: 5px;
+                        margin: 5px 0px 5px 0px;
                         border: 1px solid #2678bd;
                         border-radius: 10px;
                         padding: 10px 7px 10px 7px;
@@ -768,8 +826,6 @@ body {
         }
     }
     .charity-content-container {
-        display: grid;
-        grid-template-rows: 0.14fr 0.35fr 0.45fr;
         padding-left: 35px;
         padding-right: 35px;
         h5,
@@ -784,6 +840,11 @@ body {
             padding: 44px 44px 20px 0px;
         }
         #treemap-container {
+            height: 72vh;
+            margin-bottom: 65px;
+            #chart {
+                height: 100%;
+            }
             text {
                 font-family: Dia;
                 font-weight: thin;
@@ -791,10 +852,6 @@ body {
             #chart .ctext {
                 font-family: Arial, Helvetica, sans-serif;
             }
-            // #chart {
-            //     background-color: #DCE2F4;
-            //     margin: 0 auto;
-            // }
             #chart svg {
                 padding-top: 5px;
             }
@@ -843,10 +900,6 @@ body {
                 stroke: white;
                 stroke-width: 0px;
             }
-            /* .children rect.parent {
-                fill: #bbb;
-                fill-opacity: 0.9;
-            } */
             .children:hover rect.child {
                 fill: #bbb;
             }
@@ -855,9 +908,10 @@ body {
             }
         }
         .charity-table-container {
-            padding-top: 120px;
+            margin-bottom: 30px;
             #charity-table {
-                height: 400px;
+                height: 100%;
+                // height: 400px;
                 padding-right: 10px;
                 .period {
                     width: 105px;
@@ -944,7 +998,8 @@ body {
                 }
                 .tbody {
                     margin: 10px -5px 0px;
-                    height: 350px;
+                    // height: 350px;
+                    height: 85vh;
                     overflow: auto;
                     .row-cell {
                         display: flex;

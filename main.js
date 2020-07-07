@@ -214,14 +214,14 @@ const drawHospitalStats = function() {
                 // d3.select('p#value-time').text("Період: " + d3.timeFormat('%Y-%m')(val));
             });
 
+        moveX = 0.055 * document.querySelector(".slider-body").getBoundingClientRect().width
+        moveY = 0.15 * document.querySelector(".slider-body").getBoundingClientRect().height
+
         var gTime = d3
-            // .select('div#slider-time')
             .select('div.slider-body')
             .append('svg')
-            // .attr('width', 550)
-            // .attr('height', 70)
             .append('g')
-            .attr('transform', 'translate(30,30)');
+            .attr('transform', 'translate(' + moveX + ',' + moveY + ')');
 
         gTime.call(sliderTime);
 
@@ -248,14 +248,15 @@ drawHospitalStats()
 
 const drawBeeSwarm = function() {
     // instead of week_load_hospitals.csv
-    d3.csv("mariupol_data_analysis/week_load_hosp_wide.csv", rowConverterData).then(function(data) {
+    d3.csv("mariupol_data_analysis/week_load_v2.csv", rowConverterData).then(function(data) {
 
-        let columnColorGlobal = "Заклад"
+        // let columnColorGlobal = "Заклад"
+        let columnColorGlobal = "hospital"
         let circleId
 
         colors = ["#C98BBC", "#BFD890", "#FFDB54", "#AC468A", "#2678bd", "#B5C4E6"]
         colorScale = d3.scaleOrdinal()
-            .domain(data, d => d["Заклад"])
+            .domain(data, d => d["hospital"])
             .range(colors)
 
 
@@ -312,7 +313,7 @@ const drawBeeSwarm = function() {
         cell.append("circle")
             .attr("id", (d, i) => "c" + i)
             .attr("r", 4)
-            .style("fill", d => colorScale(d.data["Заклад"]))
+            .style("fill", d => colorScale(d.data["hospital"]))
             // .attr("fill", d => console.log(d.data["Заклад"]))
             .attr("cx", function(d) { return d.data.x; })
             .attr("cy", function(d) { return d.data.y; });
@@ -321,7 +322,7 @@ const drawBeeSwarm = function() {
             .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
         cell.append("title")
-            .text(function(d) { return d.data.corrected_names + "\n" + formatValue(d.data.patients_per_week); });
+            .text(function(d) { return d.data['ПІБ лікаря'] + "\n" + formatValue(d.data.patients_per_week); });
 
 
 
@@ -378,7 +379,7 @@ const drawBeeSwarm = function() {
 
 
 
-        doctorNames = data.map(d => d['corrected_names'])
+        doctorNames = data.map(d => d['ПІБ лікаря'])
 
         d3.select("div#search-box").select("datalist")
             .selectAll("option").data(doctorNames).enter()
@@ -388,7 +389,7 @@ const drawBeeSwarm = function() {
 
         // making legend
         legendKeys = d3.nest()
-            .key(function(d) { return d['Заклад'] })
+            .key(function(d) { return d['hospital'] })
             .entries(data)
 
 
@@ -447,7 +448,7 @@ const drawBeeSwarm = function() {
             let selectedDoctor
 
             gList.each(function(d) {
-                if (d.data.corrected_names === searchQuery) {
+                if (d.data['ПІБ лікаря'] === searchQuery) {
 
                     selectedDoctor = d3.select(this)
                     circleId = this.childNodes[0].id
@@ -462,9 +463,9 @@ const drawBeeSwarm = function() {
 
 
                 doctorData = d3.nest()
-                    .key(function(d) { return d['Заклад'] })
-                    .key(function(d) { return d['Спеціальність'] })
-                    .entries(data.filter(d => (d['corrected_names'] === searchQuery)))
+                    .key(function(d) { return d['hospital'] })
+                    .key(function(d) { return d['specialization'] })
+                    .entries(data.filter(d => (d['ПІБ лікаря'] === searchQuery)))
 
 
                 docLoad = doctorData[0].values[0].values[0].patients_per_week
@@ -533,7 +534,7 @@ const drawBeeSwarm = function() {
             let selectedDoctor
 
             gList.each(function(d) {
-                if (d.data.corrected_names === docFromCircle) {
+                if (d.data['ПІБ лікаря'] === docFromCircle) {
                     selectedDoctor = d3.select(this)
                     circleId = this.childNodes[0].id
                 }
@@ -547,9 +548,9 @@ const drawBeeSwarm = function() {
 
 
                 doctorData = d3.nest()
-                    .key(function(d) { return d['Заклад'] })
-                    .key(function(d) { return d['Спеціальність'] })
-                    .entries(data.filter(d => (d['corrected_names'] === docFromCircle)))
+                    .key(function(d) { return d['hospital'] })
+                    .key(function(d) { return d['specialization'] })
+                    .entries(data.filter(d => (d['ПІБ лікаря'] === docFromCircle)))
 
                 docLoad = doctorData[0].values[0].values[0].patients_per_week
 
@@ -618,7 +619,7 @@ const drawBeeSwarm = function() {
 
 
             // column = (toFilter === "hospital") ? "Заклад" : "Спеціальність"
-            column = (buttonId === "hospital") ? "Заклад" : "Спеціальність"
+            column = (buttonId === "hospital") ? "hospital" : "specialization"
 
             columnColorGlobal = column
 

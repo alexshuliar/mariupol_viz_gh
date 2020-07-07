@@ -1,8 +1,3 @@
-d3.select(".container").style("height", "1200px")
-    // for old 3 navboxes menu
-    // d3.select(".sidebar-container").style("grid-template-rows", "0.15fr 20.88% 0.65fr")
-d3.select(".sidebar-container").style("grid-template-rows", "0.15fr 27% 0.65fr")
-
 const drawTable = function(data) {
 
     tbody = d3.select("#charity-table").select(".tbody")
@@ -190,8 +185,10 @@ var defaults = {
     format: ",d",
     title: "",
     width: document.querySelector("#treemap-container").getBoundingClientRect().width - 5,
-    height: document.querySelector("#treemap-container").getBoundingClientRect().height - 5
+    height: document.querySelector("#treemap-container").getBoundingClientRect().height - 24 - 35 - 5
 };
+
+console.log(document.querySelector("#treemap-container").getBoundingClientRect().height);
 
 function main(o, data) {
     var root,
@@ -204,7 +201,7 @@ function main(o, data) {
         height = 36 + 16;
 
 
-    d3.select("#chart").style("width", opts.width + "px").style("height", opts.height + "px")
+    // d3.select("#chart").style("width", opts.width + "px").style("height", opts.height + "px")
     var width = opts.width - margin.left - margin.right,
         // height = opts.height - margin.top - margin.bottom - theight,
         height = opts.height,

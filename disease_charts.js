@@ -1,6 +1,3 @@
-d3.select(".container").style("height", "1500px")
-d3.select(".sidebar-container").style("grid-template-rows", "0.15fr 0.2592fr 0.65fr")
-
 const rowConverterData = function(d) {
 
 
@@ -8,7 +5,7 @@ const rowConverterData = function(d) {
     keys = Object.keys(d)
 
     keys.forEach(function(key) {
-        if (key === "counts") {
+        if (key === "counts" || key === "counts_unique") {
             d[key] = +d[key]
 
         } else if (d[key] === "") {
@@ -43,8 +40,11 @@ const drawBars = function(barData, reset = false, clicked = undefined) {
 
     svgArea = document.querySelector("#gender-age-bars")
     w = svgArea.getBoundingClientRect().width - 45
-        // h = svgArea.getBoundingClientRect().height - 5
-    h = 400
+    h = svgArea.getBoundingClientRect().height - 5
+
+    console.log(w);
+    // h = svgArea.getBoundingClientRect().height - 5
+    // h = 400
 
     // console.log(w, h)
 
@@ -267,6 +267,7 @@ const formatTime = d3.timeFormat("%Y-%m")
 const parseTime = d3.timeParse("%Y-%m")
 
 
+valueChoice = 'counts'
 
 
 let filterStatus = {
@@ -301,28 +302,6 @@ let filterStatus = {
             'Жіноча': false
         }
     },
-    // 'diag_category': {
-    //     'status': false,
-    //     'visible': false,
-    //     'items': {
-    //         "Вагітність, пологи, планування сім'ї": false,
-    //         "Вухо": false,
-    //         "Дихальна система": false,
-    //         "Ендокринні/метаболічні розлади та порушення харчування": false,
-    //         "Жіночі статеві органи": false,
-    //         "Загальні та неспецифічні": false,
-    //         "Кров, кровотворні органи та імунна система": false,
-    //         "Нервова система": false,
-    //         "Око": false,
-    //         "Опорно-рухова система": false,
-    //         "Серцево-судинна система": false,
-    //         "Травна система": false,
-    //         "Урологічні": false,
-    //         "Шкірна система": false
-    //     }
-
-    // },
-
 
     'Діагноз': {
         'status': false,
@@ -343,6 +322,7 @@ const drawMouseArea = function(svg, scale, w) {
         .key(function(d) { return d['visit_month'] })
         .entries(dataGlobal)
         .map(row => parseTime(row['key']))
+
 
 
     svg.append("g").attr("class", "hover-area")
@@ -438,7 +418,6 @@ const resetFilters = function() {
     })
 
     d3.select("div.hosp-choice").select("ul").style("display", "none")
-    MakeTimeLine(reset = true)
 
     searchField = document.querySelector(".diag-input-box").querySelector("input")
     searchField['value'] = ''
@@ -453,6 +432,10 @@ const resetFilters = function() {
     d3.selectAll(".f-button").classed("active-button", false)
 
 
+    d3.select(".slider-box").select("input").property("checked", false)
+    valueChoice = 'counts'
+
+    MakeTimeLine(reset = true)
 
 
 }
@@ -472,7 +455,7 @@ const drawLineChart = function(filteredDataset, reset = false) {
     heightSvg = svgArea.getBoundingClientRect().height - 5
 
 
-    var margin = { top: 5, right: 20, bottom: 100, left: 60 },
+    var margin = { top: 5, right: 20, bottom: 50, left: 60 },
 
         w = widthSvg - margin.left - margin.right,
         h = heightSvg - margin.top - margin.bottom;
@@ -484,7 +467,7 @@ const drawLineChart = function(filteredDataset, reset = false) {
         .key(function(d) { return d['Діагноз'] })
         .key(function(d) { return d['visit_month'] })
         .rollup(function(v) {
-            return d3.sum(v, v => v['counts'])
+            return d3.sum(v, v => v[valueChoice])
 
         })
         .entries(filteredDataset)
@@ -705,7 +688,7 @@ const drawLineChart = function(filteredDataset, reset = false) {
     let legendKeys
     let legendBoxes
 
-    console.log(keepLegend);
+    // console.log(keepLegend);
 
     if (keepLegend) {
         // for next legend draw - to keep legend unchanged based on filters for lines
@@ -810,7 +793,7 @@ const drawLineChart = function(filteredDataset, reset = false) {
 
         filterStatus['Діагноз']['status'] = true
         filterStatus['Діагноз']['items'] = legendKeys
-        console.log(keepLegend);
+            // console.log(keepLegend);
         MakeTimeLine(reset = true)
 
 
@@ -993,7 +976,7 @@ const drawLineChart = function(filteredDataset, reset = false) {
 
 const MakeTimeLine = function(reset = false) {
 
-    d3.csv("mariupol_data_analysis/diagnoses_stats.csv", rowConverterData).then(function(data) {
+    d3.csv("mariupol_data_analysis/diagnoses_stats_v2.csv", rowConverterData).then(function(data) {
 
         activeFilters = Object.keys(filterStatus).filter(key => filterStatus[key]['status'] === true)
 
@@ -1042,7 +1025,7 @@ const MakeTimeLine = function(reset = false) {
         dataset = d3.nest()
             .key(function(d) { return d['Діагноз'] })
             .rollup(function(v) {
-                return d3.sum(v, v => v['counts'])
+                return d3.sum(v, v => v[valueChoice])
 
             })
             .entries(filteredData)
@@ -1065,7 +1048,7 @@ const MakeTimeLine = function(reset = false) {
 
         console.log(filteredDataset)
 
-        drawLineChart(filteredDataset, reset = true)
+        drawLineChart(filteredDataset, reset = reset)
 
 
 
@@ -1081,7 +1064,7 @@ const MakeTimeLine = function(reset = false) {
 
 const drawFirstTime = function() {
 
-    d3.csv("mariupol_data_analysis/diagnoses_stats.csv", rowConverterData).then(function(data) {
+    d3.csv("mariupol_data_analysis/diagnoses_stats_v2.csv", rowConverterData).then(function(data) {
 
         console.log(data)
             // filterButtons = ["Категорія діагнозу", "Діагноз", "Стать", "Вік", 'Скинути всі фільтри']
@@ -1443,6 +1426,19 @@ const drawFirstTime = function() {
         })
 
 
+        d3.select("div.slider-box").select("input").on("change", function() {
+
+            if (this.checked) {
+                valueChoice = 'counts_unique'
+
+            } else {
+                valueChoice = 'counts'
+            }
+
+            setTimeout(MakeTimeLine, 300, true)
+        })
+
+
 
 
 
@@ -1546,19 +1542,7 @@ const drawFirstTime = function() {
             document.querySelector(".calc-container").classList.remove("initial")
             document.querySelector(".calc-container").classList.add("tight")
 
-            d3.select(".container").style("height", "1600px")
-                // for old 3 navboxes menu
-                // d3.select(".sidebar-container").style("grid-template-rows", "0.15fr 0.185fr 0.65fr")
-            d3.select(".sidebar-container").style("grid-template-rows", "0.15fr 0.24fr 0.65fr")
-
-            d3.select(".header-line-chart").style("padding-top", "20px")
-                // d3.select(".dis-content-container").style("grid-template-rows", "0.14fr 0.354fr 0.15fr 0.4")
-            d3.select(".dis-content-container").style("grid-template-rows", "10% min-content 10% 37.5%")
-
-            // grid-template-rows: 0.12fr 0.23fr 0.17fr 0.40fr;
-            // d3.select(".dis-content-container").style("grid-template-rows", "0.15fr 0.23fr 0.17fr 0.42fr")
-            // grid-template-rows: 0.15fr 0.2fr 0.65fr;
-            // d3.select(".sidebar-container").style("grid-template-rows", "0.15fr 0.2fr 0.65fr")
+            d3.select(".gender-age-body").style("display", "flex")
 
             drawAgeStat(barFilters = barFilters, rawData = data)
         })

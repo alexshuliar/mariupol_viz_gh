@@ -214,10 +214,10 @@ const createHeatmap = function(docName) {
 
 
 
-        d3.csv("mariupol_data_analysis/doc_day_load_2m.csv").then(function(data) {
+        d3.csv("mariupol_data_analysis/doc_day_load_2m_v2.csv").then(function(data) {
 
             console.log(docName.name)
-            data = data.filter(d => d.corrected_names === docName.name)
+            data = data.filter(d => d['ПІБ лікаря'] === docName.name)
 
 
             svgIndicator = document.getElementsByClassName("month").length
@@ -432,7 +432,7 @@ const createHeatmap = function(docName) {
 const createGenderAge = function(docName) {
 
 
-    d3.csv("mariupol_data_analysis/gender_age_stat.csv", rowConverterData).then(function(data) {
+    d3.csv("mariupol_data_analysis/gender_age_stat_v2.csv", rowConverterData).then(function(data) {
 
         // ageOrder = ["y0-5", "y6-17", "y18-39", "y40-64", "y65+"]
         ageOrder = ["y65+", "y40-64", "y18-39", "y6-17", "y0-5"]
@@ -573,7 +573,7 @@ const createGenderAge = function(docName) {
                 }
             })
 
-            newDataset = data.filter(d => (d['corrected_names'] === searchQuery.name))
+            newDataset = data.filter(d => (d['ПІБ лікаря'] === searchQuery.name))
             newDataset.sort(function(a, b) {
                 return ageOrder.map(row => row).indexOf(a['person_age']) - ageOrder.map(row => row).indexOf(b['person_age']);
             });
