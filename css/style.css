@@ -55,10 +55,9 @@ body {
 
 .container .sidebar-container .header-background {
   background-image: url(../M_sign.png);
-  height: 34vh;
   background-size: 50% 100%;
   background-repeat: no-repeat;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .container .sidebar-container .header-background .header-block {
@@ -70,7 +69,6 @@ body {
 }
 
 .container .sidebar-container .navbar-block {
-  height: 47vh;
   padding: 0px 55px 0px 55px;
 }
 
@@ -78,35 +76,14 @@ body {
   height: 100%;
 }
 
-.container .sidebar-container .navbar-block #navbar ul {
-  height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-  text-align: center;
-}
-
 .container .sidebar-container .navbar-block .navbox {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 60px;
+  padding: 1.2em 1em 1.2em 1em;
+  margin-bottom: 1em;
+  text-align: center;
   border-style: solid;
   border-width: 1px;
   border-color: white;
-  border-radius: 10px;
+  border-radius: 2vh;
 }
 
 .container .sidebar-container .navbar-block .navbox a {
@@ -156,7 +133,6 @@ body {
 }
 
 .container .content-container .hospital-stats-container .bar-chart {
-  height: 30vh;
   margin-bottom: 15px;
 }
 
@@ -552,6 +528,7 @@ body {
 
 .container .dis-content-container .choose-gender-age .calc-container {
   margin-bottom: 30px;
+  padding-bottom: 20px;
   background-image: -webkit-gradient(linear, left top, right top, from(#2678bd), to(#c88bbc));
   background-image: linear-gradient(90deg, #2678bd, #c88bbc);
   border-radius: 10px;
@@ -567,7 +544,6 @@ body {
           align-items: center;
   font-size: 12px;
   color: white;
-  height: 50vh;
 }
 
 .container .dis-content-container .choose-gender-age .calc-container.tight {
@@ -989,7 +965,7 @@ body {
   -ms-grid-row-span: 2;
   -ms-grid-column: 1;
   grid-area: svg;
-  height: 50vh;
+  height: 330px;
 }
 
 .container .dis-content-container .line-chart-container .line-chart-svg svg text {
