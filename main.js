@@ -59,24 +59,26 @@ const drawHospBars = function(data, reset = false) {
         // visits
         tbody.select("div#n_visits").select("svg").selectAll("rect")
             .data(data)
-            .transition().duration(800).attr("width", 0)
+            // .transition().duration(800).attr("width", 0)
             .transition().duration(800).attr("width", d => xScale["n_visits"](d['n_visits']))
 
         tbody.select("div#n_visits").select("svg").selectAll("text").data(data)
-            .transition().duration(800).attr("opacity", 0)
-            .transition().duration(400).attr("x", d => xScale["n_visits"](d["n_visits"]) + 17)
+            .transition().duration(400).attr("opacity", 0)
+            // .transition().duration(400)
+            .attr("x", d => xScale["n_visits"](d["n_visits"]) + 17)
             .transition().duration(800).text(d => formatPay(Math.round(d["n_visits"])))
             .attr("opacity", 1)
 
         // payments
         tbody.select("div#sum").select("svg").selectAll("rect")
             .data(data)
-            .transition().duration(800).attr("width", 0)
+            // .transition().duration(800).attr("width", 0)
             .transition().duration(800).attr("width", d => xScale["sum"](d['sum']))
 
         tbody.select("div#sum").select("svg").selectAll("text").data(data)
-            .transition().duration(800).attr("opacity", 0)
-            .transition().duration(400).attr("x", d => xScale["sum"](d["sum"]) + 17)
+            .transition().duration(400).attr("opacity", 0)
+            // .transition().duration(400)
+            .attr("x", d => xScale["sum"](d["sum"]) + 17)
             .transition().duration(800).text(d => formatPay(Math.round(d["sum"])))
             .attr("opacity", 1)
 

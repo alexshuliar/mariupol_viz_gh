@@ -1,89 +1,8 @@
-// const drawSubButtons = function(buttonsData) {
-
-
-//     d3.select("div.popup-chart").selectAll("div")
-//         .data(buttonsData)
-//         .enter()
-//         .append("div")
-//         .attr("class", d => "sub-button" + " " + d['chart_name'])
-//         // .style("float", "left")
-//         .append("text").text(d => d["chart_title"])
-
-
-//     d3.select("div.last-week").style("clear", "right")
-
-
-// }
-
 const createPopupChart = function(searchQuery, first = true) {
-
-    // console.log(searchQuery)
-
-
-
-
-    chartIndicator = document.getElementById("popup-chart-container")
-
-
-    if (chartIndicator) {
-
-
-        d3.select("div#popup-chart-container")
-            // .transition()
-            // .style("opacity", 0)
-            .remove()
-
-    }
-
-
-    // chartContainer = d3.select("div#doctor-details")
-    //     .append("div")
-    //     .attr("id", "popup-chart-container")
-
-    // d3.select("div#popup-chart-container").append("div").attr("id", "doctor-name").append("text").text(searchQuery)
-    // d3.select("div#popup-chart-container").append("div").attr("class", "popup-chart-title").attr("id", "load-title").text("Тижневе навантаження лікаря")
-    // d3.select("div#popup-chart-container").append("div").attr("class", "popup-chart-title").attr("id", "gender-age-title").text("Статево-віковий розподіл пацієнтів")
-    // d3.select("div#popup-chart-container").append("div").attr("class", "chart-buttons")
-    // d3.select("div#popup-chart-container").append("div").attr("class", "popup-chart")
-
-    // d3.select("div#doctor-profile").select("p#doctor-name").text(searchQuery)
-    // d3.select("div.gender-age").append("div").attr("class", "popup-chart-title").attr("id", "gender-age-title").text("Статево-віковий розподіл пацієнтів")
-
-    // d3.select("div#doctor-details")
-    //     .transition()
-    //     .delay(200)
-    //     .style("opacity", 1)
-
-    // chartButtons = [
-    //     { chart_name: "week-stat", chart_title: "Навантаження по дням тижня" },
-    //     { chart_name: "age-sex-stat", chart_title: "Статево-вікова статистика" },
-    // ]
-
-
-    // d3.select("div.chart-buttons").selectAll("div")
-    //     .data(chartButtons)
-    //     .enter()
-    //     .append("div")
-    //     .attr("class", d => "ch-button" + " " + d['chart_name'])
-    //     .style("float", "left")
-    //     .append("text").text(d => d["chart_title"])
-
-
-
-
-    // weekButtons = [
-    //     { chart_name: "week-mean", chart_title: "Середнє за весь час" },
-    //     { chart_name: "last-week", chart_title: "Пацієнтів за минулий тиждень" },
-    // ]
-
-    // drawSubButtons(weekButtons)
 
     createGenderAge(searchQuery)
 
     createHeatmap(searchQuery)
-
-
-
 
 }
 
@@ -105,6 +24,18 @@ const createHeatmap = function(docName) {
         December: "Грудень",
     }
 
+    weekMapper = {
+        Mon: "Пн",
+        Tue: "Вт",
+        Wed: "Ср",
+        Thu: "Чт",
+        Fri: "Пт",
+        Sat: "Сб",
+        Sun: "Нд",
+    }
+
+
+
     function drawCalendar(dateData) {
 
         var weeksInMonth = function(month) {
@@ -116,14 +47,14 @@ const createHeatmap = function(docName) {
         var maxDate = d3.max(dateData, function(d) { return new Date(d.visit_date) })
 
         var cellMargin = 2,
-            cellSize = 19;
+            cellSize = 17;
 
         var translateMargin = 65
 
         var day = d3.timeFormat("%u"),
             week = d3.timeFormat("%W"),
             format = d3.timeFormat("%Y-%m-%d"),
-            titleFormat = d3.utcFormat("%a, %d-%b");
+            titleFormat = d3.utcFormat("%a, %d-%B");
         monthName = d3.timeFormat("%B"),
             months = d3.timeMonth.range(d3.timeMonth.floor(minDate), maxDate);
 
@@ -140,8 +71,13 @@ const createHeatmap = function(docName) {
             })
             .append("g")
 
-        svg2 = document.querySelector("#calendar-heatmap").querySelector("svg:last-child")
-        svg2.style.width = svg2.getBoundingClientRect().width * 0.7
+        svgAll = document.querySelector("#calendar-heatmap").querySelectorAll("svg")
+
+        if (svgAll.length > 1) {
+            svg2 = svgAll[1]
+            svg2.style.width = svg2.getBoundingClientRect().width * 0.7
+        }
+
 
 
         svg.append("text")
@@ -156,6 +92,10 @@ const createHeatmap = function(docName) {
 
         d3.select("#calendar-heatmap").select("svg").select("text").attr("transform", "translate(" + translateMargin + ", 0)")
 
+        console.log(d3.select("#calendar-heatmap"));
+        console.log(svg);
+
+        svg.style("opacity", 0)
 
         var rect = svg.selectAll("rect.day")
             .data(function(d, i) { return d3.timeDays(d, new Date(d.getFullYear(), d.getMonth() + 1, 1)); })
@@ -174,12 +114,16 @@ const createHeatmap = function(docName) {
             .on("mouseout", function(d) {
                 d3.select(this).classed('hover', false);
             })
-            .datum(format);
+            .datum(format)
 
         d3.select("#calendar-heatmap").select("svg").selectAll("rect").attr("transform", "translate(" + translateMargin + ", 0)")
 
         rect.append("title")
-            .text(function(d) { return titleFormat(new Date(d)); });
+            .text(function(d) {
+                titleStr = titleFormat(new Date(d)).split(",")
+                titleUkr = weekMapper[titleStr[0]] + ", " + monthMapper[titleStr[1].split("-")[1]] + "-" + titleStr[1].split("-")[0]
+                return titleUkr;
+            });
 
         var lookup = d3.nest()
             .key(function(d) { return d.visit_date; })
@@ -195,8 +139,13 @@ const createHeatmap = function(docName) {
 
         rect.filter(function(d) { return d in lookup; })
             .style("fill", function(d) { return d3.interpolatePuBu(scale(lookup[d])); })
+            // .style("opacity", 1)
             .select("title")
-            .text(function(d) { return titleFormat(new Date(d)) + ":  " + lookup[d]; });
+            .text(function(d) {
+                titleStr = titleFormat(new Date(d)).split(",")
+                titleUkr = weekMapper[titleStr[0]] + ", " + monthMapper[titleStr[1].split("-")[1]] + "-" + titleStr[1].split("-")[0]
+                return titleUkr + ", візитів" + ": " + lookup[d];
+            });
 
 
         weekNames = ["пн", "вт", "ср", "чт", "пт", "сб", "нд"]
@@ -208,28 +157,31 @@ const createHeatmap = function(docName) {
             .attr("text-anchor", "end")
             .text(d => d)
 
+        svg.transition().duration(400).style("opacity", 1)
+
     }
 
     if (searchQuery) {
 
-
-
         d3.csv("mariupol_data_analysis/doc_day_load_2m_v2.csv").then(function(data) {
 
-            console.log(docName.name)
             data = data.filter(d => d['ПІБ лікаря'] === docName.name)
-
 
             svgIndicator = document.getElementsByClassName("month").length
             if (svgIndicator > 0) {
 
                 d3.select("#calendar-heatmap").selectAll("svg")
+                    .transition().duration(400).style("opacity", 0)
                     .remove()
+
+                setTimeout(drawCalendar, 500, data)
+            } else {
+                drawCalendar(data)
             }
 
-            // setTimeout(drawCalendar, 600)
 
-            drawCalendar(data);
+
+            // drawCalendar(data);
 
 
         })
@@ -241,192 +193,7 @@ const createHeatmap = function(docName) {
 
 }
 
-
-
-// draw bars
-
-// const createBars = function(docName) {
-
-//     d3.csv("mariupol_data_analysis/doctors_day_load.csv", rowConverterData).then(function(data) {
-
-//         newDataset = data.filter(d => (d['corrected_names'] === docName))
-
-//         svgIndicator = document.getElementsByClassName("load-chart").length
-//         if (svgIndicator === 1) {
-
-//             d3.select("div.popup-chart").select("div.load-chart").remove()
-//             d3.select("div.popup-chart").selectAll("div.sub-button").remove()
-//         }
-
-//         drawSubButtons(weekButtons)
-
-//         var w = 420;
-//         var h = 250;
-//         var padding = 25;
-
-
-//         let yScale = d3.scaleLinear()
-//             .domain([0, d3.max(data, d => d['mean_patients'])])
-//             .range([h - padding, padding])
-
-//         let xScale = d3.scaleBand()
-//             .domain(data.map(d => (d['visit_dayofweek'])))
-//             .range([padding, w - padding])
-//             .paddingInner(0.7)
-//             .paddingOuter(0.4)
-//             // .padding(0.7)
-
-
-
-//         xAxis = d3.axisBottom()
-//             .scale(xScale)
-//             .ticks(10)
-
-//         yAxis = d3.axisLeft()
-//             .scale(yScale)
-//             .ticks(5);
-
-
-
-//         let svg = d3.select("div.popup-chart")
-//             .append("div")
-//             .attr("class", "load-chart")
-//             .append("svg")
-//             .attr("width", w)
-//             .attr("height", h)
-
-//         svg.selectAll("rect")
-//             .data(newDataset)
-//             .enter()
-//             .append("rect")
-//             .attr("x", d => xScale(d['visit_dayofweek']))
-//             .attr("y", d => yScale(d['mean_patients']))
-//             .attr("height", d => h - yScale(d['mean_patients']))
-//             .attr("width", xScale.bandwidth() * 1.3)
-//             .attr("transform", "translate(0," + (-padding) + ")")
-//             .append("title")
-//             .text(function(d) {
-//                 return formatPay(d['mean_patients'])
-//             });
-
-
-
-
-//         svg.append("g")
-//             .attr("class", "x-axis")
-//             .attr("transform", "translate(0," + (h - padding) + ")")
-//             .call(xAxis);
-
-//         svg.select(".x-axis").selectAll("text").style("font-size", "8px")
-
-//         svg.append("g")
-//             .attr("class", "y-axis")
-//             .attr("transform", "translate(" + padding + ",0)")
-//             .call(yAxis);
-
-
-
-
-//         d3.selectAll("div.sub-button").on("click", function() {
-
-//             mapCol = {
-//                 "week-mean": "mean_patients",
-//                 "last-week": "n_patients",
-//             }
-
-
-//             whichButton = this.getAttribute("class").split(" ").slice(-1)[0]
-//             colName = mapCol[whichButton]
-
-//             yScale.domain([0, d3.max(data, d => d[colName])])
-
-
-//             xAxis = d3.axisBottom()
-//                 .scale(xScale)
-//                 .ticks(10)
-
-//             yAxis = d3.axisLeft()
-//                 .scale(yScale)
-//                 .ticks(5);
-
-//             // replace NaN values with zeros for further transition
-//             selection = svg.selectAll("rect")
-//             selection
-//                 .call(function(rects) {
-//                     rects.attr("height", function() {
-//                         rectHeight = this.getAttribute("height")
-//                         if (isNaN(rectHeight)) {
-//                             return 0
-//                         } else {
-//                             return rectHeight
-//                         }
-//                     })
-//                 })
-//                 .call(function(rects) {
-//                     rects.attr("y", function() {
-//                         rectTop = this.getAttribute("y")
-//                         if (rectTop === null) {
-//                             return h
-//                         } else {
-//                             return rectTop
-//                         }
-//                     })
-//                 })
-
-
-
-//             svg.selectAll("rect")
-//                 .data(newDataset)
-//                 .transition()
-//                 // .enter()
-//                 // .append("rect")
-//                 .attr("x", d => xScale(d['visit_dayofweek']))
-//                 .attr("y", d => yScale(d[colName]))
-//                 .attr("height", d => h - yScale(d[colName]))
-//                 .attr("width", xScale.bandwidth() * 1.3)
-//                 .attr("transform", "translate(0," + (-padding) + ")")
-
-//             svg.selectAll("rect")
-//                 .select("title")
-//                 .text(function(d) {
-//                     return formatPay(d[colName])
-//                 })
-
-
-
-//             svg.select("g.y-axis")
-//                 .transition()
-//                 .call(yAxis);
-
-
-
-
-
-
-//         })
-
-//     })
-
-
-//     d3.selectAll("div.ch-button").on("click", function() {
-
-
-//         whichButton = this.getAttribute("class").split(" ").slice(-1)[0]
-
-
-//         // if (whichButton === 'week-stat') {
-//         //     createBars(docName)
-//         // } else if (whichButton === 'age-sex-stat') {
-//         //     createGenderAge(docName)
-//         // }
-
-
-
-//     })
-
-
-// }
-
+firstIterFlag = false
 
 
 const createGenderAge = function(docName) {
@@ -434,7 +201,6 @@ const createGenderAge = function(docName) {
 
     d3.csv("mariupol_data_analysis/gender_age_stat_v2.csv", rowConverterData).then(function(data) {
 
-        // ageOrder = ["y0-5", "y6-17", "y18-39", "y40-64", "y65+"]
         ageOrder = ["y65+", "y40-64", "y18-39", "y6-17", "y0-5"]
 
         let genderAverage = d3.nest()
@@ -471,72 +237,22 @@ const createGenderAge = function(docName) {
         })
 
         let femaleAverage = genderAvFlat.filter(d => d.person_gender == 'жіноча')
-            // let femaleAverage = genderAverage.filter(d => d.key == 'жіноча')[0]['values']
-            // femaleAverage.sort(function(a, b) {
-            //     return ageOrder.map(row => row).indexOf(a['key']) - ageOrder.map(row => row).indexOf(b['key'])
-            // })
-
-        // femSum = femaleAverage.reduce(function(a, b) { return { value: a.value + b.value } }).value
-        //     // to percent
-        // femaleAverage = femaleAverage.map(function(d) {
-        //     return {
-        //         key: d.key,
-        //         value: d.value / femSum
-        //     }
-        // })
 
         let maleAverage = genderAvFlat.filter(d => d.person_gender == 'чоловіча')
-            // maleAverage.sort(function(a, b) {
-            //     return ageOrder.map(row => row).indexOf(a['key']) - ageOrder.map(row => row).indexOf(b['key'])
-            // })
 
-        // maleSum = maleAverage.reduce(function(a, b) { return { value: a.value + b.value } }).value
-        //     // to percent
-        // maleAverage = maleAverage.map(function(d) {
-        //     return {
-        //         key: d.key,
-        //         value: d.value / maleSum
-        //     }
-        // })
-
-        // console.log(maleAverage)
-
-
-
-
-
-
-
-        // console.log(newDataset)
-
-
-        // d3.select("div#doctor-details").append("div").attr("class", "gender-age")
 
 
         genAgeSvg = document.getElementsByClassName("gender-age")[0]
         w = genAgeSvg.getBoundingClientRect().width - 5
         h = genAgeSvg.getBoundingClientRect().height
         padding = 21
-            // var w = 300;
-            // var h = 250;
-            // var padding = 30;
 
         let yScaleAge = d3.scaleBand()
             .domain(femaleAverage.map(d => (d['person_age'])))
             .range([padding, h - padding])
             .paddingOuter(0.3)
 
-
-        // let xScaleMale = d3.scaleLinear()
-        //     .domain([0, d3.max(male, d => d['n_visits'])])
-        //     .range([0, w / 2])
-
-        // let xScaleFemale = d3.scaleLinear()
-        //     .domain([0, d3.max(female, d => d['n_visits'])])
-        //     .range([0, w / 2])
-
         let xScaleGender = d3.scaleLinear()
-            // .domain([0, d3.max(newDataset, d => d['n_visits'])])
             .domain([0, 0.3]) // domain in fractions/percents
             .range([0, w / 3])
 
@@ -544,34 +260,84 @@ const createGenderAge = function(docName) {
 
             svg = d3.select("div.gender-age").select("svg")
 
+            if (firstIterFlag) {
 
-            svg.selectAll("g.average").selectAll("rect")
-                .transition().duration(800)
-                .attr("fill-opacity", 0)
-                .attr("stroke-opacity", 1)
-                .attr("stroke-width", 2)
+                d3.select("div.doctor-profile").select("p#doc-name")
+                    .transition().duration(400).style("opacity", 0)
+                    .transition().duration(400).text(searchQuery.name)
+                    .transition().duration(400).style("opacity", 1)
+
+                d3.select("div.doctor-profile").select("p#doc-hospital")
+                    .transition().duration(400).style("opacity", 0)
+                    .transition().duration(400).text(searchQuery.hospital)
+                    .transition().duration(400).style("opacity", 1)
+
+                d3.select("div.doctor-profile").select("p#doc-spec")
+                    .transition().duration(400).style("opacity", 0)
+                    .transition().duration(400).text(searchQuery.spec)
+                    .transition().duration(400).style("opacity", 1)
 
 
+                d3.select("div.doctor-profile").select("p#load-indicator")
+                    .transition().duration(400).style("opacity", 0)
+                    .text(function() {
 
-            d3.select("div.doctor-profile").select("p#doc-name").text(searchQuery.name)
-            d3.select("div.doctor-profile").select("p#doc-hospital").text(searchQuery.hospital)
-            d3.select("div.doctor-profile").select("p#doc-spec").text(searchQuery.spec)
+                        text_start = "Даний лікар приймає на "
+                        text_end = " пацієнтів в тиждень, ніж в середньому."
 
-            d3.select("div.doctor-profile").select("p#load-indicator").text(function() {
+                        if (searchQuery.diff > 0) {
 
-                text_start = "Даний лікар приймає на "
-                text_end = " пацієнтів в тиждень, ніж в середньому."
+                            return text_start + (searchQuery.diff.toFixed(3) * 100).toString().slice(0, 4) + "% більше" + text_end
 
-                if (searchQuery.diff > 0) {
+                        } else {
 
-                    return text_start + (searchQuery.diff.toFixed(3) * 100) + "% більше" + text_end
+                            return text_start + (Math.abs(searchQuery.diff).toFixed(3) * 100).toString().slice(0, 4) + "% менше" + text_end
 
-                } else {
+                        }
+                    })
+                    .transition().duration(400).style("opacity", 1)
 
-                    return text_start + (Math.abs(searchQuery.diff).toFixed(3) * 100) + "% менше" + text_end
+            } else {
 
-                }
-            })
+                d3.select("div.doctor-profile").select("p#doc-name")
+                    .style("opacity", 0)
+                    .transition().duration(400).text(searchQuery.name)
+                    .transition().duration(400).style("opacity", 1)
+
+                d3.select("div.doctor-profile").select("p#doc-hospital")
+                    .style("opacity", 0)
+                    .transition().duration(400).text(searchQuery.hospital)
+                    .transition().duration(400).style("opacity", 1)
+
+                d3.select("div.doctor-profile").select("p#doc-spec")
+                    .style("opacity", 0)
+                    .transition().duration(400).text(searchQuery.spec)
+                    .transition().duration(400).style("opacity", 1)
+
+
+                d3.select("div.doctor-profile").select("p#load-indicator")
+                    .style("opacity", 0)
+                    .transition().duration(400)
+                    .text(function() {
+
+                        text_start = "Даний лікар приймає на "
+                        text_end = " пацієнтів в тиждень, ніж в середньому."
+
+                        if (searchQuery.diff > 0) {
+
+                            return text_start + (searchQuery.diff.toFixed(3) * 100).toString().slice(0, 4) + "% більше" + text_end
+
+                        } else {
+
+                            return text_start + (Math.abs(searchQuery.diff).toFixed(3) * 100).toString().slice(0, 4) + "% менше" + text_end
+
+                        }
+                    })
+                    .transition().duration(400).style("opacity", 1)
+
+            }
+
+
 
             newDataset = data.filter(d => (d['ПІБ лікаря'] === searchQuery.name))
             newDataset.sort(function(a, b) {

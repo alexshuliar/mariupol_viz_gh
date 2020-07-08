@@ -22,34 +22,25 @@ const getTextAges = function(clicked) {
 
     d3.json("text.json").then(function(data) {
 
-        // d3.select("#age-description").select("p.main-text").style("opacity", 0)
         d3.select("#gender-age-description").select("p.main-text").html(data[clicked])
-
-        // d3.select("#age-description").select("p.main-text")
-        //     .transition()
-        //     .duration(800)
-        //     .style("opacity", 1)
 
 
     })
 
 }
 
+
+
 const drawBars = function(barData, reset = false, clicked = undefined) {
+
+
 
 
     svgArea = document.querySelector("#gender-age-bars")
     w = svgArea.getBoundingClientRect().width - 45
     h = svgArea.getBoundingClientRect().height - 5
 
-    console.log(w);
-    // h = svgArea.getBoundingClientRect().height - 5
-    // h = 400
 
-    // console.log(w, h)
-
-    // var w = 250;
-    // var h = 400;
     var padding = 25;
 
     let xScaleBar = d3.scaleLinear()
@@ -66,75 +57,24 @@ const drawBars = function(barData, reset = false, clicked = undefined) {
 
 
 
-    // .transition().duration(800)
-    // .style("opacity", 1)
-
-
     if (reset) {
         svg = d3.select("div#gender-age-bars").select("svg")
 
         svg.selectAll("rect").data(barData)
-            .transition().duration(800).attr("width", 0)
             .transition().duration(800).attr("width", d => xScaleBar(d['value']))
 
         svg.selectAll("text").data(barData)
-            .transition().duration(800).attr("opacity", 0)
-            // .transition().duration(400).attr("x", d => xScaleBar(d['value']) + 10)
-            // .transition().duration(800).text(d => d['key'])
-            .transition().duration(400).attr("x", 5)
-            .transition().duration(800).text(d => d['key'])
+            .transition().duration(400).attr("opacity", 0)
+            .transition().duration(400).text(d => d['key'])
             .attr("opacity", 1)
 
+        setTimeout(getTextAges, 800, clicked)
 
-
-
-
-        //     if (clicked) {
-
-        //         // d3.select("#age-description").select("p.main-text").html("Новий текст<br>nextline")
-
-        //         recomTitle = document.querySelector("#gender-age-description p").innerHTML
-        //         if (!recomTitle) {
-
-        //             d3.select("#gender-age-description").select("p.block-header")
-        //                 .style("opacity", 0)
-        //                 .transition().duration(1600)
-        //                 .style("opacity", 1)
-        //                 .text("Рекомендації")
-
-        //             d3.select("#gender-age-description").select("p.main-text")
-        //                 .style("opacity", 0)
-        //                 // .transition().duration(800)
-        //                 // .style("opacity", 1)
-
-
-        //             getTextAges(clicked)
-
-
-        //             d3.select("#gender-age-description").select("p.main-text")
-        //                 .transition().duration(3000)
-        //                 .style("opacity", 1)
-
-
-        //         } else {
-
-        //             d3.select("#gender-age-description").select("p.main-text")
-        //                 .transition().duration(3000)
-        //                 .style("opacity", 0)
-        //                 // .transition().duration(800)
-        //                 // .style("opacity", 1)
-        //                 // setTimeout(getTextAges(clicked), 3000)
-
-        //             getTextAges(clicked)
-        //                 // setTimeout(getTextAges(clicked), 900)
-
-        //             d3.select("#gender-age-description").select("p.main-text")
-        //                 .transition().duration(3000)
-        //                 .style("opacity", 1)
-        //         }
-
-        //     }
-
+        d3.select("#gender-age-description").select("p.main-text")
+            .transition().duration(800)
+            .style("opacity", 0)
+            .transition().duration(800)
+            .style("opacity", 1)
 
 
     } else {
@@ -146,7 +86,6 @@ const drawBars = function(barData, reset = false, clicked = undefined) {
 
         svg.selectAll("rect").data(barData).enter().append("g").append("rect")
             .attr("width", 0)
-            // .attr("width", d => xScaleBar(d['value']))
             .attr("height", 10)
             .attr("y", d => yScaleBar(d['key']) - 15)
             .attr("x", padding - 20)
@@ -175,7 +114,7 @@ const drawBars = function(barData, reset = false, clicked = undefined) {
 
         svg.selectAll("g").selectAll("text")
             .transition()
-            .duration(2500)
+            .duration(1500)
             .attr("opacity", 1)
 
 
@@ -188,13 +127,21 @@ const drawBars = function(barData, reset = false, clicked = undefined) {
         d3.select("#gender-age-description").select("p.main-text")
             .style("opacity", 0)
 
+        getTextAges(clicked)
+
+        d3.select("#gender-age-description").select("p.main-text")
+            .transition().duration(1600)
+            .style("opacity", 1)
+
+
+
     }
 
-    getTextAges(clicked)
 
-    d3.select("#gender-age-description").select("p.main-text")
-        .transition().duration(3000)
-        .style("opacity", 1)
+
+
+
+
 
 }
 
@@ -215,8 +162,6 @@ const filterBarData = function(barFilters, rawData) {
     }
 
     filteredData = reducedData
-        // console.log(filteredData)
-
 
     dataset = d3.nest()
         .key(function(d) { return d['Діагноз'] })
@@ -515,14 +460,88 @@ const drawLineChart = function(filteredDataset, reset = false) {
         .ticks(5);
 
 
+    line = d3.line()
+        .x(function(d) { return xScale(d.key); })
+        .y(function(d) { return yScale(d.value); })
+        .curve(d3.curveCatmullRom)
+
+
     if (reset === true) {
 
-        d3.select("div.line-chart-svg").select("svg")
-            // .style("opacity", 1)
-            // .transition()
-            // .duration(500)
-            // .style("opacity", 0)
-            .remove()
+        svg = d3.select(".line-chart-svg").select("svg").select("g")
+
+        svg.select("g.axis.x")
+            .call(xAxis)
+
+        svg.select("g.axis.y")
+            .call(yAxis);
+
+
+
+        // drawing multiple lines for each diagnosis
+        diagnoses.forEach(function(diag, i) {
+
+            diagName = diag.key
+
+            dataset = diag.values
+
+            dataset.forEach(d => {
+                d['key'] = parseTime(d['key']),
+                    d['value'] = d['value']
+            })
+
+            dataset.sort((a, b) => a.key - b.key)
+
+            path = svg.select("path#l" + i)
+                .datum(dataset)
+                .transition()
+                .duration(1000)
+                .attr("stroke", function() {
+                    if (i < 5) {
+                        return colorScale(diagName)
+                    } else {
+                        return 'lightgrey'
+                    }
+                })
+                .attr("class", (d) => "line" + " " + diagName.split(" ")[0])
+                .attr("id", "l" + i)
+                .attr("d", line)
+
+            path.attr("stroke-dasharray", null)
+                .attr("stroke-dashoffset", null)
+
+
+            g = svg.select("g.points.l" + i)
+
+
+            g.selectAll("circle")
+                .data(dataset)
+                .attr("cx", d => xScale(d.key))
+                .attr("cy", d => yScale(d.value))
+                .attr("r", 4)
+                .attr("fill", function() {
+                    if (i < 5) {
+                        return colorScale(diagName)
+                    } else {
+                        return "grey"
+                    }
+                })
+                .attr("class", (d, i) => "point-" + i + " " + diagName.split(" ")[0])
+                .style("opacity", 0)
+
+            g.selectAll("text").data(dataset)
+                .attr("x", d => xScale(d.key) + 10)
+                .attr("y", d => yScale(d.value) - 5)
+                .text(d => d.value)
+                .attr("class", (d, i) => "point-" + i + " " + diagName.split(" ")[0])
+                .attr("opacity", 0)
+                // .attr("font-size", 14)
+
+
+
+        })
+
+
 
         if (!keepLegend) {
 
@@ -537,158 +556,119 @@ const drawLineChart = function(filteredDataset, reset = false) {
         }
 
 
+    } else {
+
+        var svg = d3.select("div.line-chart-svg")
+            .append("svg")
+            .attr("width", "100%")
+            .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")")
+
+
+        svg.append("g")
+            .attr("class", "axis x")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .attr("transform", "translate(0," + 10 + ")")
+
+        svg.append("g")
+            .attr("class", "axis y")
+            .call(yAxis);
+
+        // text label for the y axis
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (h / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Кількість звернень")
+            .style("font-size", "10px")
+
+
+        // drawing multiple lines for each diagnosis
+        diagnoses.forEach(function(diag, i) {
+
+            diagName = diag.key
+
+            dataset = diag.values
+
+            dataset.forEach(d => {
+                d['key'] = parseTime(d['key']),
+                    d['value'] = d['value']
+            })
+
+            dataset.sort((a, b) => a.key - b.key)
+
+            path = svg.append("path")
+                .datum(dataset)
+                .attr("fill", "none")
+                .attr("stroke", function() {
+                    if (i < 5) {
+                        return colorScale(diagName)
+                    } else {
+                        return 'lightgrey'
+                    }
+                })
+                .attr("stroke-width", 2)
+                .attr("class", (d) => "line" + " " + diagName.split(" ")[0])
+                .attr("id", "l" + i)
+                .attr("d", line)
+
+
+            totalLength = path.node().getTotalLength()
+
+            path.attr("stroke-dasharray", totalLength + " " + totalLength)
+                .attr("stroke-dashoffset", totalLength)
+                .transition()
+                .duration(2000)
+                .attr("stroke-dashoffset", 0);
+
+
+
+            g = svg.append("g").attr("class", "points l" + i)
+
+
+            g.selectAll("circle")
+                .data(dataset).enter()
+                .append("circle")
+                .attr("cx", d => xScale(d.key))
+                .attr("cy", d => yScale(d.value))
+                .attr("r", 4)
+                .attr("fill", function() {
+                    if (i < 5) {
+                        return colorScale(diagName)
+                    } else {
+                        return "grey"
+                    }
+                })
+                .attr("class", (d, i) => "point-" + i + " " + diagName.split(" ")[0])
+                .style("opacity", 0)
+
+            g.selectAll("text").data(dataset).enter()
+                .append("text")
+                .attr("x", d => xScale(d.key) + 10)
+                .attr("y", d => yScale(d.value) - 5)
+                .text(d => d.value)
+                .attr("class", (d, i) => "point-" + i + " " + diagName.split(" ")[0])
+                .attr("opacity", 0)
+                .attr("font-size", 14)
+
+
+        })
+
 
 
     }
 
-    //Create SVG element
-    var svg = d3.select("div.line-chart-svg")
-        .append("svg")
-        .attr("width", "100%")
-        .attr("height", h + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")")
-
-    svg.style("opacity", 0)
-        .transition()
-        .duration(500)
-        .style("opacity", 1)
-
-
-
-
-    svg.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + h + ")")
-        .call(xAxis)
-        .selectAll("text")
-        .attr("transform", "translate(0," + 10 + ")")
-
-
-    svg.append("g")
-        .attr("class", "axis")
-        .call(yAxis);
-
-
-
-
-
-
-
-
-
-    // text label for the y axis
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
-        .attr("x", 0 - (h / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Кількість звернень")
-        .style("font-size", "10px")
-
-
-
-    // drawing multiple lines for each diagnosis
-    diagnoses.forEach(function(diag, i) {
-
-        diagName = diag.key
-
-        dataset = diag.values
-
-        dataset.forEach(d => {
-            d['key'] = parseTime(d['key']),
-                d['value'] = d['value']
-        })
-
-        dataset.sort((a, b) => a.key - b.key)
-
-
-
-        //Define line generators
-        line = d3.line()
-            .x(function(d) { return xScale(d.key); })
-            .y(function(d) { return yScale(d.value); })
-            .curve(d3.curveCatmullRom)
-
-        path = svg.append("path")
-            .datum(dataset)
-            .attr("fill", "none")
-            // .attr("stroke", colorScale(diagName))
-            .attr("stroke", function() {
-                if (i < 5) {
-                    return colorScale(diagName)
-                } else {
-                    return 'lightgrey'
-                }
-            })
-            .attr("stroke-width", 2)
-            // .attr("class", "line")
-            .attr("class", (d) => "line" + " " + diagName.split(" ")[0])
-            .attr("id", i)
-            .attr("d", line)
-
-
-        totalLength = path.node().getTotalLength()
-
-        path.attr("stroke-dasharray", totalLength + " " + totalLength)
-            .attr("stroke-dashoffset", totalLength)
-            .transition()
-            .duration(2000)
-            .attr("stroke-dashoffset", 0);
-
-
-
-        g = svg.append("g").attr("class", "points")
-
-
-        g.selectAll("circle")
-            .data(dataset).enter()
-            .append("circle")
-            .attr("cx", d => xScale(d.key))
-            .attr("cy", d => yScale(d.value))
-            .attr("r", 4)
-            // .attr("r", function() {
-            //     if (i < 5) {
-            //         return 4
-            //     }
-            // })
-            .attr("fill", function() {
-                if (i < 5) {
-                    return colorScale(diagName)
-                } else {
-                    return "grey"
-                }
-            })
-            // .attr("fill", d => colorScale(diagName))
-            .attr("class", (d, i) => "point-" + i + " " + diagName.split(" ")[0])
-            .style("opacity", 0)
-
-        g.selectAll("text").data(dataset).enter()
-            .append("text")
-            .attr("x", d => xScale(d.key) + 10)
-            .attr("y", d => yScale(d.value) - 5)
-            .text(d => d.value)
-            .attr("class", (d, i) => "point-" + i + " " + diagName.split(" ")[0])
-            .attr("opacity", 0)
-            .attr("font-size", 14)
-            // .attr("font-size", function() {
-            //     if (i < 5) {
-            //         return 14
-            //     } else {
-            //         return 0
-            //     }
-            // })
-
-
-    })
 
 
     let legendKeys
     let legendBoxes
 
-    // console.log(keepLegend);
 
     if (keepLegend) {
         // for next legend draw - to keep legend unchanged based on filters for lines
@@ -1051,13 +1031,7 @@ const MakeTimeLine = function(reset = false) {
         drawLineChart(filteredDataset, reset = reset)
 
 
-
-
-
-
     })
-
-
 
 }
 
@@ -1067,67 +1041,9 @@ const drawFirstTime = function() {
     d3.csv("mariupol_data_analysis/diagnoses_stats_v2.csv", rowConverterData).then(function(data) {
 
         console.log(data)
-            // filterButtons = ["Категорія діагнозу", "Діагноз", "Стать", "Вік", 'Скинути всі фільтри']
-            // filterButtons = ["Категорія діагнозу", "Стать", "Вік", 'Скинути всі фільтри']
-
-        // // first buttons
-        // d3.select("div#container")
-        //     .append("div").attr("class", "stat-panel")
-        //     .call(panel => panel.append("div").attr("class", "data-choice"))
-        //     .call(panel => panel.append("div").attr("class", "buttons"))
-        //     .call(panel => panel.append("div").attr("class", "timeline-panel"))
-        // d3.selectAll("div.data-choice")
-        //     .selectAll("div").data(["Всі лікарні", "Вибрати лікарню"]).enter()
-        //     .append("div")
-        //     .attr("class", "select-button")
-        //     .append("text").text(d => d)
-
-        // // clear float divs before 
-        // d3.select("div.data-choice").append("div").attr("class", "clear-before")
-
-
-        // d3.select("div.buttons")
-        //     .selectAll("div").data(filterButtons).enter()
-        //     .append("div")
-        //     .attr("class", "filter-button")
-        //     .attr("id", (d, i) => "i" + i)
-        //     .attr("tabindex", (d, i) => i)
-        //     .append("text").text(d => d)
-
-
-        // d3.select("div.buttons").append("div")
-        //     .attr("class", "filter-button")
-        //     .attr("id", "diagnosis")
-        //     .append("text").text("Діагноз")
-
-
-
-        // // clear float divs before 
-        // d3.select("div.buttons").append("div").attr("class", "clear-before")
-
-
-        // d3.select("div.timeline-panel")
-        //     .call(panel => panel.append("div").attr("id", "chart").style("display", "inline-block"))
-        //     .call(panel => panel.append("div").attr("id", "legend").style("display", "inline-block"))
-
-
-
-
-
-
 
         // create hospital checkboxes
         hospitals = Object.keys(filterStatus['hospital']['items'])
-
-        // d3.select("div.data-choice").append("div")
-        //     .attr("class", "data-checkbox")
-        //     .style("display", "none")
-        //     .selectAll("label")
-        //     .data(hospitals).enter()
-        //     .append("label").attr("class", "label-container")
-        //     .call(label => label.text(d => "КНП Центр первинної медико-санітарної допомоги №" + d))
-        //     .call(label => label.append("input").attr("type", "checkbox"))
-        //     .call(label => label.append("span").attr("class", "checkmark"))
 
         // new edition
         d3.select("div.hosp-choice")
@@ -1141,75 +1057,15 @@ const drawFirstTime = function() {
             .call(label => label.append("input").attr("type", "checkbox"))
             // .call(label => label.append("span").attr("class", "checkmark"))
 
-        // // HAVE TO MAKE IT IN ONE LOOP
-        // // ages
-        // ages = d3.map(data, d => d.age).keys()
-
-        // xAges = document.getElementById("i2").getBoundingClientRect().x
-
-        // d3.select("div.buttons").append("div")
-        //     .attr("class", "data-checkbox age")
-        //     .style("margin-left", (xAges + 35) + "px")
-        //     .style("display", "none")
-        //     .selectAll("label")
-        //     .data(ages).enter()
-        //     .append("label").attr("class", "label-container")
-        //     .call(label => label.text(d => d))
-        //     .call(label => label.append("input").attr("type", "checkbox"))
-        //     .call(label => label.append("span").attr("class", "checkmark"))
-
-        // // genders
-        // genders = d3.map(data, d => d['Стать']).keys()
-
-        // xGenders = document.getElementById("i1").getBoundingClientRect().x
-
-        // d3.select("div.buttons").append("div")
-        //     .attr("class", "data-checkbox Стать")
-        //     .style("margin-left", (xGenders + 35) + "px")
-        //     .style("display", "none")
-        //     .selectAll("label")
-        //     .data(genders).enter()
-        //     .append("label").attr("class", "label-container")
-        //     .call(label => label.text(d => d))
-        //     .call(label => label.append("input").attr("type", "checkbox"))
-        //     .call(label => label.append("span").attr("class", "checkmark"))
-
-        // // diagnoses category
-        // diagnosesCat = d3.map(data, d => d['Категорія діагнозу']).keys()
-
-        // xDiagCat = document.getElementById("i0").getBoundingClientRect().x
-
-        // d3.select("div.buttons").append("div")
-        //     .attr("class", "data-checkbox diag_category")
-        //     .style("margin-left", (xDiagCat) + "px")
-        //     .style("display", "none")
-        //     .selectAll("label")
-        //     .data(diagnosesCat).enter()
-        //     .append("label").attr("class", "label-container")
-        //     .call(label => label.text(d => d))
-        //     .call(label => label.append("input").attr("type", "checkbox"))
-        //     .call(label => label.append("span").attr("class", "checkmark"))
 
         // // diagnoses
         allDiagnoses = d3.map(data, d => d['Діагноз']).keys()
 
-        // d3.select("div.buttons").select("div#diagnosis").append("div").attr("class", "search-disease")
-        //     .call(div => div.append("label").attr("for", "dis-search"))
-        //     .call(div => div.append("input")
-        //         .attr("type", "search")
-        //         .attr("id", "dis-search")
-        //         .attr("list", "doctors")
-        //         .attr("autocomplete", "off")
-        //         .attr("placeholder", "Ввести хворобу")
-        //     )
-        //     .call(div => div.append("datalist").attr("id", "doctors"))
 
         d3.select("div.diag-input-box").append("datalist").attr("id", "diagnoses")
             .selectAll("option").data(allDiagnoses).enter()
             .append("option")
             .attr("value", d => d)
-
-
 
 
 
@@ -1271,28 +1127,18 @@ const drawFirstTime = function() {
 
                                 MakeTimeLine(reset = true)
 
-
-
                             })
 
-
-
                             filterStatus['hospital']['visible'] = true
-
-
 
                         } else {
                             filterStatus['hospital']['visible'] = false
 
                             d3.select("div.hosp-choice ul").style("display", "none")
                         }
-
-
                 }
 
             }
-
-
 
         })
 
@@ -1319,9 +1165,6 @@ const drawFirstTime = function() {
                 buttonClass = this.classList[1]
                 text = nameMapper[buttonClass]
 
-
-
-
                 activeFilters = filterStatus[text]['items']
 
 
@@ -1333,8 +1176,6 @@ const drawFirstTime = function() {
 
                 activeFilters[valSelected] = !activeFilters[valSelected]
 
-
-
                 hideSectionStatus = Object.values(activeFilters).every(button_status => !button_status)
 
                 if (hideSectionStatus) {
@@ -1344,18 +1185,6 @@ const drawFirstTime = function() {
                 }
 
                 MakeTimeLine(reset = true)
-
-
-
-
-
-
-
-
-
-
-
-
 
             }
 
@@ -1388,9 +1217,6 @@ const drawFirstTime = function() {
                         check: true
                     }
 
-                    // console.log(diagObj)
-
-
                     filterStatus['Діагноз']['items'] = [diagObj]
 
 
@@ -1399,8 +1225,6 @@ const drawFirstTime = function() {
                 }
 
             }
-
-
 
         })
 
@@ -1439,10 +1263,6 @@ const drawFirstTime = function() {
         })
 
 
-
-
-
-
         // repeated from another function
         dataset = d3.nest()
             .key(function(d) { return d['Діагноз'] })
@@ -1468,8 +1288,6 @@ const drawFirstTime = function() {
         dataGlobal = data
 
         drawLineChart(filteredDataset)
-
-
 
 
         // section for gender-age bars
@@ -1535,8 +1353,6 @@ const drawFirstTime = function() {
         })
 
 
-
-
         d3.select("div.next-button").on("click", function() {
             d3.select("div.title-calc").remove()
             document.querySelector(".calc-container").classList.remove("initial")
@@ -1547,16 +1363,9 @@ const drawFirstTime = function() {
             drawAgeStat(barFilters = barFilters, rawData = data)
         })
 
-
-
-
     })
 
-
-
 }
-
-
 
 
 

@@ -359,14 +359,21 @@ body {
                     }
                 }
                 .general-info {
-                    display: grid;
-                    grid-template-rows: 0.2fr 0.15fr 0.6fr;
-                    row-gap: 15px;
+                    &>div:not(:last-child) {
+                        margin-bottom: 15px;
+                    }
+                    // display: grid;
+                    // grid-template-rows: 0.2fr 0.15fr 0.6fr;
+                    // row-gap: 15px;
                 }
                 .load-info {
-                    display: grid;
-                    grid-template-rows: 0.2fr 0.7fr;
-                    row-gap: 15px;
+                    .load-perc {
+                        min-height: 3em;
+                        margin-bottom: 15px;
+                    }
+                    // display: grid;
+                    // grid-template-rows: 0.25fr 0.7fr;
+                    // row-gap: 15px;
                 }
             }
         }

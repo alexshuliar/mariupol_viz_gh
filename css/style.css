@@ -487,20 +487,13 @@ body {
   stroke: #aa328a;
 }
 
-.container .content-container .doctor-stats-container .doctor-profile .general-info {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 0.2fr 0.15fr 0.6fr;
-      grid-template-rows: 0.2fr 0.15fr 0.6fr;
-  row-gap: 15px;
+.container .content-container .doctor-stats-container .doctor-profile .general-info > div:not(:last-child) {
+  margin-bottom: 15px;
 }
 
-.container .content-container .doctor-stats-container .doctor-profile .load-info {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 0.2fr 0.7fr;
-      grid-template-rows: 0.2fr 0.7fr;
-  row-gap: 15px;
+.container .content-container .doctor-stats-container .doctor-profile .load-info .load-perc {
+  min-height: 3em;
+  margin-bottom: 15px;
 }
 
 .container .dis-content-container {
