@@ -261,6 +261,7 @@ body {
   border-width: 1px;
   border-color: #2678bd;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .container .content-container .doctor-stats-container .beeswarm-chart .main-chart .button-container .color-buttons .selected-button {
@@ -360,6 +361,7 @@ body {
   border-radius: 10px;
   padding: 10px 7px 10px 7px;
   color: white;
+  cursor: pointer;
 }
 
 .container .content-container .doctor-stats-container .search-button #search-box .input-box {
@@ -628,6 +630,7 @@ body {
   border: 1px solid white;
   padding: 15px 20px;
   margin: 0px 5px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .choose-gender-age .calc-container .age-buttons {
@@ -658,6 +661,7 @@ body {
   height: 40px;
   width: 40px;
   margin: 0px 5px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .choose-gender-age .calc-container .next-button {
@@ -666,6 +670,7 @@ body {
   color: #2678bd;
   font-weight: bold;
   padding: 15px 20px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .choose-gender-age .calc-container .calc-selected-button {
@@ -763,6 +768,7 @@ body {
 .container .dis-content-container .line-chart-container .line-filters-left .gender-block .drop-filter {
   font-weight: bold;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .line-chart-container .line-filters-left .gender-block .drop-filter:before {
@@ -791,6 +797,7 @@ body {
   border: 1px solid;
   border-radius: 15px;
   padding: 11.5px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .line-chart-container .line-filters-left .gender-block .gender-filters .male-filter:nth-child(1),
@@ -859,6 +866,7 @@ body {
   height: 37px;
   width: 37px;
   margin: 0px 5px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .line-chart-container .line-filters-left .age-block .age-filters .age-filter.active-button {
@@ -1004,6 +1012,7 @@ body {
   border: 1px solid #2678bd;
   padding: 10px;
   border-radius: 15px;
+  cursor: pointer;
 }
 
 .container .dis-content-container .line-chart-container .line-filters-right .hospital-filters .hosp-choice {

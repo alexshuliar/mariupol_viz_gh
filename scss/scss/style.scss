@@ -197,6 +197,7 @@ body {
                                 border-width: 1px;
                                 border-color: #2678bd;
                                 border-radius: 10px;
+                                cursor: pointer;
                             }
                             .selected-button {
                                 background-color: #2678bd;
@@ -273,6 +274,7 @@ body {
                         border-radius: 10px;
                         padding: 10px 7px 10px 7px;
                         color: white;
+                        cursor: pointer;
                     }
                     .input-box {
                         margin-left: 15px;
@@ -458,6 +460,7 @@ body {
                         border: 1px solid white;
                         padding: 15px 20px;
                         margin: 0px 5px;
+                        cursor: pointer;
                     }
                 }
                 .age-buttons {
@@ -475,6 +478,7 @@ body {
                         height: 40px;
                         width: 40px;
                         margin: 0px 5px;
+                        cursor: pointer;
                     }
                 }
                 .next-button {
@@ -483,6 +487,7 @@ body {
                     color: #2678bd;
                     font-weight: bold;
                     padding: 15px 20px;
+                    cursor: pointer;
                 }
                 .calc-selected-button {
                     color: #2678bd;
@@ -548,6 +553,7 @@ body {
                     .drop-filter {
                         font-weight: bold;
                         margin-bottom: 10px;
+                        cursor: pointer;
                         &:before {
                             content: "X";
                             width: 17px;
@@ -567,6 +573,7 @@ body {
                             border: 1px solid;
                             border-radius: 15px;
                             padding: 11.5px;
+                            cursor: pointer;
                             &:nth-child(1) {
                                 margin-right: 10px;
                             }
@@ -609,6 +616,7 @@ body {
                             height: 37px;
                             width: 37px;
                             margin: 0px 5px;
+                            cursor: pointer;
                             &.active-button {
                                 background-color: #2678bd;
                                 color: white;
@@ -720,6 +728,7 @@ body {
                         border: 1px solid #2678bd;
                         padding: 10px;
                         border-radius: 15px;
+                        cursor: pointer;
                     }
                     .hosp-choice {
                         padding-right: 22px;
