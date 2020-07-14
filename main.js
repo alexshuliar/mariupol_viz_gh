@@ -469,11 +469,11 @@ const drawBeeSwarm = function() {
                     .key(function(d) { return d['specialization'] })
                     .entries(data.filter(d => (d['ПІБ лікаря'] === searchQuery)))
 
-
                 docLoad = doctorData[0].values[0].values[0].patients_per_week
+
                 difference = docLoad / averagePerWeek - 1
 
-                // console.log(difference)
+                console.log(difference)
 
                 docObject = {
                     name: searchQuery,

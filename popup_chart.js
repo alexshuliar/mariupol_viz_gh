@@ -92,9 +92,6 @@ const createHeatmap = function(docName) {
 
         d3.select("#calendar-heatmap").select("svg").select("text").attr("transform", "translate(" + translateMargin + ", 0)")
 
-        console.log(d3.select("#calendar-heatmap"));
-        console.log(svg);
-
         svg.style("opacity", 0)
 
         var rect = svg.selectAll("rect.day")
@@ -222,9 +219,8 @@ const createGenderAge = function(docName) {
         genderAvFlat = genderAv.flat()
 
         genderAvFlat.sort(function(a, b) {
-            return ageOrder.map(row => row).indexOf(a['person_age']) - ageOrder.map(row => row).indexOf(b['person_age']);
+            return ageOrder.indexOf(a['person_age']) - ageOrder.indexOf(b['person_age']);
         });
-
 
         sumGenderAv = genderAvFlat.reduce(function(a, b) { return { n_visits: a.n_visits + b.n_visits } }).n_visits
             // to percent
@@ -341,7 +337,7 @@ const createGenderAge = function(docName) {
 
             newDataset = data.filter(d => (d['ПІБ лікаря'] === searchQuery.name))
             newDataset.sort(function(a, b) {
-                return ageOrder.map(row => row).indexOf(a['person_age']) - ageOrder.map(row => row).indexOf(b['person_age']);
+                return ageOrder.indexOf(a['person_age']) - ageOrder.indexOf(b['person_age']);
             });
 
 
