@@ -347,6 +347,7 @@ const resetFilters = function() {
     legendGlobal = undefined
     colorScaleGlobal = undefined
     legendClickFlag = false
+    newDiagnoses = []
 
     filterStatus['Діагноз']['init'] = true
 
@@ -487,8 +488,6 @@ const drawLineChart = function(filteredDataset, reset = false) {
             return newDiagnoses.indexOf(a['key']) - newDiagnoses.indexOf(b['key']);
         });
     }
-
-
 
     let colorScale
     if (colorScaleGlobal) {
@@ -788,10 +787,6 @@ const drawLineChart = function(filteredDataset, reset = false) {
         })
 
 
-        diagnosesGlobal = diagnoses
-            // d3.selectAll("path.line").each(d => console.log(d))
-
-
     }
 
 
@@ -812,6 +807,8 @@ const drawLineChart = function(filteredDataset, reset = false) {
 
 
     } else {
+
+        console.log(diagnoses);
 
         legendKeys = diagnoses.map(function(d) {
             return {
